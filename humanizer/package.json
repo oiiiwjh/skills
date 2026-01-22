@@ -1,0 +1,22 @@
+{
+  "name": "humanizer-skill",
+  "version": "1.0.0",
+  "description": "OpenCode skill that removes signs of AI-generated writing from text",
+  "main": "humanizer-implementation.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "keywords": [
+    "opencode",
+    "skill",
+    "humanizer",
+    "ai-writing",
+    "text-processing"
+  ],
+  "author": "Adapted from blader/humanizer",
+  "license": "MIT",
+  "dependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

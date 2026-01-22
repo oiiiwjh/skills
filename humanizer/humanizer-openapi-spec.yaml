@@ -1,0 +1,263 @@
+openapi: 3.0.0
+info:
+  title: Humanizer Skill API
+  description: OpenCode skill that removes signs of AI-generated writing from text
+  version: 1.0.0
+  contact:
+    name: Adapted from blader/humanizer
+    url: https://github.com/blader/humanizer
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://api.opencode.ai/v1
+    description: OpenCode API server
+
+paths:
+  /skills/humanizer:
+    post:
+      summary: Humanize text by removing AI writing patterns
+      description: |
+        Processes text to detect and remove 24 common AI writing patterns,
+        making it sound more natural and human-written.
+      operationId: humanizeText
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HumanizeRequest'
+      responses:
+        '200':
+          description: Text successfully humanized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HumanizeResponse'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /skills/humanizer/batch:
+    post:
+      summary: Humanize multiple texts in batch
+      description: Process multiple texts to remove AI writing patterns
+      operationId: batchHumanize
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchHumanizeRequest'
+      responses:
+        '200':
+          description: Texts successfully humanized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchHumanizeResponse'
+
+components:
+  schemas:
+    HumanizeRequest:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
+          description: Text to humanize
+          example: "The new software update serves as a testament to the company's commitment to innovation."
+        options:
+          $ref: '#/components/schemas/HumanizerOptions'
+
+    HumanizerOptions:
+      type: object
+      properties:
+        strictness:
+          type: string
+          enum: [low, medium, high]
+          default: medium
+          description: How strictly to apply pattern detection
+        preserveTone:
+          type: boolean
+          default: true
+          description: Whether to preserve the original tone of the text
+        addPersonality:
+          type: boolean
+          default: true
+          description: Whether to add human personality to the text
+        targetAudience:
+          type: string
+          enum: [general, academic, business, casual, technical]
+          default: general
+          description: Target audience for the humanized text
+
+    HumanizeResponse:
+      type: object
+      properties:
+        original:
+          type: string
+          description: Original input text
+        humanized:
+          type: string
+          description: Humanized version of the text
+        detectedPatterns:
+          type: array
+          items:
+            type: string
+          description: List of detected AI writing patterns
+        changes:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternChange'
+          description: Detailed changes made
+        summary:
+          type: string
+          description: Summary of changes made
+        statistics:
+          $ref: '#/components/schemas/TextStatistics'
+
+    PatternChange:
+      type: object
+      properties:
+        pattern:
+          type: string
+          description: Name of the detected pattern
+        description:
+          type: string
+          description: Description of the pattern
+        changesMade:
+          type: array
+          items:
+            $ref: '#/components/schemas/WordChange'
+          description: Specific word-level changes
+
+    WordChange:
+      type: object
+      properties:
+        position:
+          type: integer
+          description: Word position in the text
+        original:
+          type: string
+          description: Original word
+        modified:
+          type: string
+          description: Modified word
+
+    TextStatistics:
+      type: object
+      properties:
+        wordCount:
+          type: object
+          properties:
+            original:
+              type: integer
+            humanized:
+              type: integer
+        charCount:
+          type: object
+          properties:
+            original:
+              type: integer
+            humanized:
+              type: integer
+        reduction:
+          type: object
+          properties:
+            words:
+              type: string
+            chars:
+              type: string
+        readability:
+          type: number
+          description: Flesch Reading Ease score (0-100)
+
+    BatchHumanizeRequest:
+      type: object
+      required:
+        - texts
+      properties:
+        texts:
+          type: array
+          items:
+            type: string
+          description: Array of texts to humanize
+        options:
+          $ref: '#/components/schemas/HumanizerOptions'
+
+    BatchHumanizeResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/HumanizeResponse'
+        batchStatistics:
+          type: object
+          properties:
+            totalTexts:
+              type: integer
+            totalPatternsDetected:
+              type: integer
+            averageReduction:
+              type: string
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+        code:
+          type: string
+          description: Error code
+
+  examples:
+    HumanizeRequestExample:
+      value:
+        text: "The new software update serves as a testament to the company's commitment to innovation. Moreover, it provides a seamless, intuitive, and powerful user experience—ensuring that users can accomplish their goals efficiently."
+        options:
+          strictness: medium
+          preserveTone: true
+          addPersonality: true
+          targetAudience: general
+
+    HumanizeResponseExample:
+      value:
+        original: "The new software update serves as a testament to the company's commitment to innovation. Moreover, it provides a seamless, intuitive, and powerful user experience—ensuring that users can accomplish their goals efficiently."
+        humanized: "The software update shows the company's focus on innovation. It has a user experience designed for efficiency."
+        detectedPatterns: ["significanceInflation", "aiVocabulary", "promotionalLanguage", "emDashOveruse"]
+        changes:
+          - pattern: "Significance Inflation"
+            description: "Undue emphasis on importance, legacy, and broader trends"
+            changesMade:
+              - position: 4
+                original: "serves"
+                modified: "shows"
+              - position: 6
+                original: "testament"
+                modified: "focus"
+          - pattern: "AI Vocabulary"
+            description: "Overused 'AI vocabulary' words"
+            changesMade:
+              - position: 10
+                original: "Moreover"
+                modified: ""
+        summary: "Detected 4 AI writing patterns across 3 categories: content, language, style."
+        statistics:
+          wordCount:
+            original: 28
+            humanized: 16
+          charCount:
+            original: 186
+            humanized: 98
+          reduction:
+            words: "42.9%"
+            chars: "47.3%"
+          readability: 65.2
