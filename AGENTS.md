@@ -1,42 +1,105 @@
-# OpenCode Skills Repository - Agent Guidelines
+# AGENTS.md - OpenCode Skills Repository Guidelines
 
-This repository contains skills for OpenCode agents. Skills are modular, self-contained packages that extend Claude's capabilities with specialized knowledge, workflows, and tool integrations.
+Comprehensive guidelines for agentic coding agents working with the OpenCode Skills Repository.
 
-## Project Structure
+## Overview
 
+This document provides guidelines, conventions, and best practices for agents working with skills in this repository. Skills are modular packages that extend Claude's capabilities with specialized knowledge, workflows, and tool integrations.
+
+## Skill Development Guidelines
+
+### Skill Structure
+
+Each skill must follow this structure:
 ```
-skills/
-├── paper-detailed-analysis/    # Academic paper analysis skill
-│   └── SKILL.md
-├── paper-depth-reading/        # Deep paper reading skill
-│   └── SKILL.md
-├── humanizer/                  # AI text humanization skill
-│   ├── SKILL.md
-│   ├── package.json
-│   ├── humanizer-implementation.js
-│   ├── test.js
-│   └── humanizer-openapi-spec.yaml
-├── skill-creator/              # Skill creation guidance
-│   ├── SKILL.md
-│   ├── scripts/
-│   │   ├── init_skill.py
-│   │   ├── package_skill.py
-│   │   └── quick_validate.py
-│   └── references/
-│       ├── workflows.md
-│       └── output-patterns.md
-└── .vscode/
-    └── settings.json
+skill-name/
+├── SKILL.md (required)           # YAML frontmatter + instructions
+├── scripts/ (optional)           # Executable code for deterministic tasks
+├── references/ (optional)        # Documentation loaded as needed
+└── assets/ (optional)            # Files used in output (templates, etc.)
 ```
 
-## Build, Test, and Development Commands
+### SKILL.md Requirements
 
-### Node.js Skills (e.g., humanizer)
+Every SKILL.md must include YAML frontmatter:
+```yaml
+---
+name: skill-name
+description: Clear description of when to use this skill
+---
+```
+
+The body should include:
+- **Overview**: What the skill does and when to use it
+- **Workflow**: Step-by-step instructions
+- **Examples**: Concrete usage examples
+- **References**: Links to bundled resources
+
+### Code Style Guidelines
+
+#### Python Skills
+- **Indentation**: 4 spaces (PEP 8)
+- **Naming**: snake_case for functions/variables, PascalCase for classes
+- **Imports**: Group imports (standard library, third-party, local)
+- **Error Handling**: Use try-except with meaningful error messages
+- **Type Hints**: Include type hints for function signatures
+
+Example:
+```python
+def validate_skill(skill_path: str) -> dict:
+    """Validate a skill directory structure.
+    
+    Args:
+        skill_path: Path to skill directory
+        
+    Returns:
+        Dictionary with validation results
+        
+    Raises:
+        FileNotFoundError: If skill directory doesn't exist
+    """
+    try:
+        # Implementation
+        pass
+    except Exception as e:
+        raise ValueError(f"Validation failed: {e}")
+```
+
+#### JavaScript/Node.js Skills
+- **Indentation**: 2 spaces
+- **Naming**: camelCase for functions/variables, PascalCase for classes
+- **Imports**: CommonJS (`require`) for Node.js skills
+- **Error Handling**: Use try-catch with descriptive error messages
+- **Async/Await**: Prefer async/await over callbacks
+
+Example:
+```javascript
+function humanizeText(text, options = {}) {
+  try {
+    // Implementation
+    return humanizedText;
+  } catch (error) {
+    throw new Error(`Humanization failed: ${error.message}`);
+  }
+}
+```
+
+## Build and Test Commands
+
+### Python-based Skills
 ```bash
-# Navigate to skill directory
-cd humanizer/
+# Run validation script
+python skill-creator/scripts/quick_validate.py skill-directory
 
-# Install dependencies (if any)
+# Run tests (if available)
+cd skill-directory
+python -m pytest tests/  # or specific test file
+```
+
+### Node.js Skills
+```bash
+# Install dependencies
+cd skill-directory
 npm install
 
 # Run tests
@@ -46,234 +109,194 @@ npm test
 node test.js
 ```
 
-### Python Scripts
+### Generic Commands
 ```bash
-# Run skill validation
-python skill-creator/scripts/quick_validate.py <skill-directory>
+# Check syntax
+python -m py_compile script.py  # Python
+node -c script.js              # JavaScript
 
-# Initialize new skill
-python skill-creator/scripts/init_skill.py <skill-name> --path <output-directory>
-
-# Package skill for distribution
-python skill-creator/scripts/package_skill.py <skill-directory>
+# Lint code
+python -m pylint script.py     # Python (if pylint installed)
+npx eslint script.js           # JavaScript (if eslint configured)
 ```
 
-### No Global Build System
-This repository doesn't have a global build system. Each skill is self-contained. Development happens at the skill level.
+## File Organization Standards
 
-## Code Style Guidelines
+### Directory Naming
+- Use kebab-case for skill directories (e.g., `skill-creator`, `github-commit`)
+- Use descriptive names that indicate the skill's purpose
 
-### JavaScript/Node.js
-- **Imports**: Use CommonJS `require()` syntax (not ES6 imports)
-- **Formatting**: 2-space indentation
-- **Naming**: camelCase for variables/functions, PascalCase for classes
-- **Error Handling**: Use try-catch blocks for async operations
-- **Example from humanizer-implementation.js**:
-```javascript
-class Humanizer {
-  async humanize(text) {
-    try {
-      // Implementation
-    } catch (error) {
-      console.error('Error:', error.message);
-    }
-  }
-}
-```
+### Required Files
+- **SKILL.md** (or **skill.md**): Main skill documentation (required)
+- **LICENSE.txt**: License information (recommended)
 
-### Python
-- **Imports**: Standard Python imports at top of file
-- **Formatting**: Follow PEP 8 (4-space indentation)
-- **Naming**: snake_case for variables/functions, PascalCase for classes
-- **Error Handling**: Use try-except with specific exceptions
-- **Example from quick_validate.py**:
-```python
-def validate_skill(skill_path):
-    """Basic validation of a skill"""
-    try:
-        # Implementation
-    except yaml.YAMLError as e:
-        return False, f"Invalid YAML in frontmatter: {e}"
-```
+### Files to Avoid
+- README.md (use SKILL.md instead)
+- INSTALLATION_GUIDE.md (include in SKILL.md)
+- CHANGELOG.md (use git history)
+- Unnecessary configuration files
 
-### Skill Development Patterns
-1. **SKILL.md Structure**:
-   - Must have YAML frontmatter with `name` and `description`
-   - Description should clearly indicate when skill triggers
-   - Body contains instructions and references to bundled resources
+### Script Organization
+- Place executable scripts in `scripts/` directory
+- Use descriptive names (e.g., `validate_skill.py`, `humanize_text.js`)
+- Include shebang lines for executable scripts
+- Add proper error handling and logging
 
-2. **Bundled Resources**:
-   - `scripts/` - Executable code for deterministic tasks
-   - `references/` - Documentation loaded as needed
-   - `assets/` - Files used in output (templates, images, etc.)
-
-3. **Progressive Disclosure**:
-   - Keep SKILL.md body concise (<500 lines)
-   - Split detailed content into reference files
-   - Load resources only when needed
-
-## Testing Guidelines
-
-### JavaScript Tests
-- Test files use simple Node.js assertions
-- No test framework required
-- Example test pattern from `humanizer/test.js`:
-```javascript
-async function testHumanizer() {
-  const humanizer = new Humanizer();
-  const testTexts = [...];
-  
-  for (let i = 0; i < testTexts.length; i++) {
-    console.log(`Test ${i + 1}:`);
-    const result = await humanizer.humanize(testTexts[i]);
-    console.log('Humanized:', result.humanized);
-  }
-}
-```
-
-### Python Tests
-- No formal test framework in use
-- Scripts should include validation logic
-- Use exit codes to indicate success/failure
-
-## Skill Creation Workflow
-
-When creating or modifying skills:
-
-1. **Understand the skill** with concrete examples
-2. **Plan reusable contents** (scripts, references, assets)
-3. **Initialize skill** with `init_skill.py`
-4. **Edit the skill** - implement resources and write SKILL.md
-5. **Package skill** with `package_skill.py`
-6. **Iterate** based on real usage
-
-## File Organization Conventions
-
-1. **Skill Directory Naming**: kebab-case (e.g., `skill-creator`)
-2. **Required Files**: Each skill must have `SKILL.md`
-3. **Optional Directories**:
-   - `scripts/` - For executable code
-   - `references/` - For documentation
-   - `assets/` - For output resources
-4. **Avoid**: README.md, INSTALLATION_GUIDE.md, CHANGELOG.md, etc.
-
-## Error Handling Standards
-
-### JavaScript
-- Use `try-catch` for async operations
-- Log errors with `console.error()`
-- Return meaningful error messages
-
-### Python
-- Catch specific exceptions
-- Return tuples `(success, message)` for validation functions
-- Use descriptive error messages
-
-## Documentation Standards
-
-1. **SKILL.md Frontmatter**:
-   ```yaml
-   ---
-   name: skill-name
-   description: Clear description of when to use this skill
-   ---
-   ```
-
-2. **Code Comments**:
-   - Use JSDoc-style comments for JavaScript functions
-   - Use docstrings for Python functions
-   - Explain complex logic, not obvious code
-
-3. **Reference Files**:
-   - Include table of contents for files >100 lines
-   - Organize by domain or variant
-   - Link directly from SKILL.md
-
-## Development Environment
+## Development Environment Setup
 
 ### VS Code Settings
-The repository includes `.vscode/settings.json` with custom color theme:
-- Active title bar: `#dc93f2`
-- Activity bar: `#dc93f2`
-- Status bar: `#dc93f2`
+The repository includes `.vscode/settings.json` with recommended settings:
+- Python path configuration
+- Formatting rules
+- Linting preferences
 
-### No Linter/Formatter Configuration
-No ESLint, Prettier, or other linter configurations found. Code style is maintained through consistency with existing patterns.
+### Git Configuration
+- Commit messages should follow conventional commits
+- Use meaningful commit descriptions
+- Include references to issues when applicable
 
-## Agent-Specific Notes
+### Testing Strategy
+1. **Unit Tests**: Test individual functions/components
+2. **Integration Tests**: Test skill workflows end-to-end
+3. **Validation Tests**: Verify skill structure and requirements
 
-1. **When working on skills**:
-   - Always validate with `quick_validate.py` before packaging
-   - Test scripts by running them
-   - Follow progressive disclosure principles
+## Skill Development Patterns
 
-2. **When using skills**:
-   - Skills trigger based on frontmatter description
-   - Load reference files only when needed
-   - Use bundled scripts for deterministic tasks
+### Progressive Disclosure Pattern
+Skills should use a three-level loading system:
+1. **Metadata** (name + description): Always in context (~100 words)
+2. **SKILL.md body**: Loaded when skill triggers (<5k words)
+3. **Bundled resources**: Loaded as needed by Claude
 
-3. **Code quality checks**:
-   - Run `npm test` for Node.js skills
-   - Validate skill structure before changes
-   - Maintain consistency with existing patterns
+### Resource Management
+- **References**: For documentation Claude should reference while working
+- **Scripts**: For deterministic tasks that are repeatedly rewritten
+- **Assets**: For files used in output (templates, images, etc.)
 
-## Common Tasks for Agents
+### Error Handling Patterns
+- Provide clear error messages
+- Include recovery suggestions
+- Log errors appropriately
+- Validate inputs before processing
 
-### Adding a New Skill
+## Agent Workflow Guidelines
+
+### When Working with Skills
+1. **Identify the right skill**: Check skill descriptions for matches
+2. **Load the skill**: Use the skill tool with the skill name
+3. **Follow instructions**: Execute the skill's workflow
+4. **Use bundled resources**: Reference scripts and documentation as needed
+5. **Validate results**: Run tests and verify outputs
+
+### Skill Selection Criteria
+- **Exact match**: Use when skill description exactly matches the task
+- **Partial match**: Use when skill covers part of the task
+- **No match**: Consider creating a new skill or adapting existing ones
+
+### Quality Assurance
+- **Before committing**: Run validation scripts
+- **After changes**: Test affected functionality
+- **Regular maintenance**: Update documentation and dependencies
+
+## Common Tasks and Commands
+
+### Skill Creation
 ```bash
-# 1. Initialize skill structure
-python skill-creator/scripts/init_skill.py new-skill-name --path .
+# Initialize new skill
+python skill-creator/scripts/init_skill.py my-new-skill --path .
 
-# 2. Edit SKILL.md and add resources
-# 3. Test the skill
-# 4. Package for distribution
-python skill-creator/scripts/package_skill.py new-skill-name
+# Validate skill structure
+python skill-creator/scripts/quick_validate.py my-new-skill
+
+# Package skill for distribution
+python skill-creator/scripts/package_skill.py my-new-skill
 ```
 
-### Modifying Existing Skill
-1. Navigate to skill directory
-2. Make changes to SKILL.md or resources
-3. Test changes (run tests if available)
-4. Validate skill structure
-5. Consider impact on existing usage
-
-### Running Tests
+### Documentation Updates
 ```bash
-# For Node.js skills
-cd skill-directory
-npm test
+# Update README.md based on current structure
+# (Use update-readme skill)
 
-# For Python scripts
-python script-name.py
+# Check git status
+git status
+
+# View recent commits
+git log --oneline -10
 ```
 
-## Best Practices
+### Code Quality
+```bash
+# Check Python syntax
+python -m py_compile script.py
 
-1. **Keep SKILL.md concise** - Under 500 lines, split content into references
-2. **Test scripts** - Run them to ensure they work
-3. **Follow naming conventions** - kebab-case for directories, camelCase/PascalCase for code
-4. **Validate before packaging** - Use `quick_validate.py`
-5. **Maintain consistency** - Follow patterns in existing skills
-6. **Use progressive disclosure** - Load resources only when needed
-7. **Document triggers clearly** - In SKILL.md frontmatter description
+# Check JavaScript syntax
+node -c script.js
+
+# Run linters (if configured)
+pylint script.py
+eslint script.js
+```
 
 ## Troubleshooting
 
-### Skill Not Triggering
-- Check SKILL.md frontmatter description
-- Ensure description clearly indicates when to use skill
-- Verify skill is in correct directory structure
+### Common Issues
 
-### Validation Errors
-- Run `quick_validate.py` to identify issues
-- Check YAML frontmatter format
-- Verify required fields (name, description)
+#### Skill Not Loading
+- Verify skill name matches directory name
+- Check SKILL.md frontmatter format
+- Ensure skill is in the correct location
 
-### Test Failures
-- Check Node.js version (>=14.0.0 for humanizer)
-- Verify dependencies are installed
-- Examine error messages for clues
+#### Script Execution Errors
+- Check file permissions (`chmod +x script.py`)
+- Verify Python/Node.js version compatibility
+- Check for missing dependencies
+
+#### Validation Failures
+- Review skill structure requirements
+- Check for missing required files
+- Verify file naming conventions
+
+### Debugging Tips
+1. **Start simple**: Test basic functionality first
+2. **Check logs**: Look for error messages and warnings
+3. **Isolate issues**: Test components independently
+4. **Consult references**: Check skill documentation and examples
+
+## Best Practices
+
+### For Skill Developers
+1. **Keep it concise**: Only include essential information
+2. **Provide examples**: Show concrete usage scenarios
+3. **Include error handling**: Anticipate and handle common errors
+4. **Test thoroughly**: Verify all functionality works as expected
+5. **Document clearly**: Write clear, actionable instructions
+
+### For Agents Using Skills
+1. **Read skill descriptions**: Choose the right skill for the task
+2. **Follow workflows**: Execute steps in the recommended order
+3. **Validate inputs**: Check requirements before proceeding
+4. **Test outputs**: Verify results meet expectations
+5. **Provide feedback**: Report issues or suggest improvements
+
+### For Repository Maintenance
+1. **Regular updates**: Keep skills current with best practices
+2. **Quality checks**: Run validation scripts regularly
+3. **Documentation sync**: Ensure documentation matches code
+4. **Dependency management**: Update dependencies as needed
+5. **Backward compatibility**: Maintain compatibility when possible
+
+## Resources
+
+- [OpenCode Skills Documentation](https://docs.opencode.ai/skills)
+- [Skill Creator Guide](./skill-creator/SKILL.md)
+- [GitHub Commit Skill](./github-commit/SKILL.md)
+- [Update Readme Skill](./update-readme/SKILL.md)
+- [Humanizer Skill](./humanizer/SKILL.md)
+
+## Contributing
+
+See the main [README.md](./README.md) for contribution guidelines and skill development principles.
 
 ---
 
-*This AGENTS.md file provides guidelines for agentic coding agents working in this repository. Follow existing patterns and conventions when making changes.*
+*Last updated: January 22, 2026*

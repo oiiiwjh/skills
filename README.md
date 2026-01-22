@@ -18,15 +18,16 @@ This repository contains skills for OpenCode agents. Skills are "onboarding guid
 - Conducting research background investigations
 
 ### 📚 **paper-depth-reading**
-**Description**: Deep paper reading skill for comprehensive academic paper analysis.
+**Description**: Comprehensive academic paper analysis skill for computer graphics and AI research papers. Provides structured framework for extracting research background, methodology, experiments, and connecting paper concepts to code implementations.
 
 **Use when**:
-- In-depth analysis of academic papers
+- Deep, structured analysis of academic papers with code implementation
 - Understanding complex research methodologies
-- Extracting detailed insights from technical papers
+- Connecting theoretical concepts with practical code implementations
+- Analyzing computer graphics, computer vision, and AI research papers
 
 ### ✨ **humanizer**
-**Description**: AI text humanization skill that removes signs of AI-generated writing from text.
+**Description**: AI text humanization skill that removes signs of AI-generated writing from text. Based on Wikipedia's comprehensive "Signs of AI writing" guide. Detects and fixes 24 common AI writing patterns.
 
 **Use when**:
 - Humanizing AI-generated text to sound more natural
@@ -42,6 +43,24 @@ This repository contains skills for OpenCode agents. Skills are "onboarding guid
 - Modifying existing skills
 - Understanding skill development patterns
 - Packaging skills for distribution
+
+### 📝 **update-readme**
+**Description**: 根据当前目录内容、git提交记录和现有文档，自动更新README.md和AGENTS.md文件。当需要维护项目文档、同步最新项目状态、或基于代码库变化更新文档时使用此技能。
+
+**Use when**:
+- Project initialization and documentation creation
+- Updating documentation after code changes
+- Regular maintenance of project documentation
+- Synchronizing team collaboration information to documentation
+
+### 🔧 **github-commit**
+**Description**: GitHub仓库提交管理技能，用于检查、验证和提交代码到GitHub仓库。确保代码正确提交到指定的GitHub仓库。
+
+**Use when**:
+- Checking current Git repository status and remote links
+- Verifying or updating GitHub remote repository links
+- Reviewing code changes and generating commit messages
+- Creating commits and optionally pushing to remote repositories
 
 ## Quick Start
 
@@ -73,6 +92,9 @@ npm test
 
 # Run specific test file
 node test.js
+
+# Test Python-based skills
+python skill-creator/scripts/quick_validate.py skill-directory
 ```
 
 ## Skill Structure
@@ -129,8 +151,57 @@ Match specificity to task fragility:
 
 ### File Organization
 - **Skill directories**: kebab-case (e.g., `skill-creator`)
-- **Required files**: Each skill must have `SKILL.md`
+- **Required files**: Each skill must have `SKILL.md` (or `skill.md`)
 - **Avoid**: README.md, INSTALLATION_GUIDE.md, CHANGELOG.md, etc.
+
+## Project Structure
+
+```
+./
+├── README.md                    # This file
+├── AGENTS.md                    # Agent guidelines (if exists)
+├── skill-creator/              # Skill creation framework
+│   ├── SKILL.md
+│   ├── scripts/
+│   │   ├── init_skill.py
+│   │   ├── quick_validate.py
+│   │   └── package_skill.py
+│   └── references/
+│       ├── workflows.md
+│       └── output-patterns.md
+├── github-commit/              # GitHub commit management
+│   ├── SKILL.md
+│   ├── scripts/
+│   │   ├── check_git_status.py
+│   │   ├── create_commit.py
+│   │   └── update_remote.py
+│   └── references/
+│       ├── git_workflow.md
+│       └── commit_conventions.md
+├── update-readme/              # README/AGENTS.md updater
+│   ├── SKILL.md
+│   ├── scripts/
+│   │   ├── analyze_project.py
+│   │   ├── generate_readme.py
+│   │   ├── update_agents.py
+│   │   └── utils.py
+│   └── references/
+│       ├── README_templates.md
+│       ├── AGENTS_template.md
+│       └── best_practices.md
+├── paper-detailed-analysis/    # Academic paper analysis
+│   └── SKILL.md
+├── paper-depth-reading/        # Deep paper reading
+│   └── SKILL.md
+├── humanizer/                  # AI text humanization
+│   ├── SKILL.md
+│   ├── package.json
+│   ├── humanizer-implementation.js
+│   ├── test.js
+│   └── README.md
+└── .vscode/                    # Development environment
+    └── settings.json
+```
 
 ## Resources
 
