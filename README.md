@@ -2,75 +2,64 @@
 
 A collection of modular, self-contained skills that extend Claude's capabilities with specialized knowledge, workflows, and tool integrations.
 
-## Overview
+## 📚 Language Versions
+
+- **English**: [README_en.md](./README_en.md) - Complete English documentation
+- **中文**: [README_cn.md](./README_cn.md) - 完整中文文档
+
+## 🚀 Quick Overview
 
 This repository contains skills for OpenCode agents. Skills are "onboarding guides" for specific domains or tasks—they transform Claude from a general-purpose agent into a specialized agent equipped with procedural knowledge that no model can fully possess.
 
-## Available Skills
+### 🔥 New Skills Added (from Khazix-Skills)
 
-### 📄 **paper-detailed-analysis**
-**Description**: 深度论文分析技能，专注于从PDF学术论文中提取关键信息，生成连贯、详实、富有洞察力的研究笔记。适用于计算机图形学、AI、机器学习等领域的学术论文分析。
+We've recently integrated three powerful skill management tools from [Khazix-Skills](https://github.com/KKKKhazix/Khaziz-Skills.git):
 
-**Use when**:
-- Analyzing PDF academic papers or arXiv links
-- Generating structured, detailed research notes
-- Combining paper analysis with code repository examination
-- Conducting research background investigations
+1. **🔄 github-to-skills** - Automated factory for converting GitHub repositories into AI skills
+2. **📋 skill-manager** - Lifecycle manager for GitHub-based skills
+3. **🚀 skill-evolution-manager** - Continuously improves skills based on user feedback
 
-### 📚 **paper-depth-reading**
-**Description**: Comprehensive academic paper analysis skill for computer graphics and AI research papers. Provides structured framework for extracting research background, methodology, experiments, and connecting paper concepts to code implementations.
+These form a complete skill lifecycle management system:
+- **Create** → **Maintain** → **Evolve**
 
-**Use when**:
-- Deep, structured analysis of academic papers with code implementation
-- Understanding complex research methodologies
-- Connecting theoretical concepts with practical code implementations
-- Analyzing computer graphics, computer vision, and AI research papers
+### 📊 Complete Skill List
 
-### ✨ **humanizer**
-**Description**: AI text humanization skill that removes signs of AI-generated writing from text. Based on Wikipedia's comprehensive "Signs of AI writing" guide. Detects and fixes 24 common AI writing patterns.
+| Skill | Category | Description |
+|-------|----------|-------------|
+| 📄 **paper-detailed-analysis** | Research | Deep academic paper analysis from PDFs |
+| 📚 **paper-depth-reading** | Research | Comprehensive paper analysis with code connections |
+| ✨ **humanizer** | Text Processing | Removes AI writing patterns from text |
+| ✨ **humanizer-zh** | Text Processing | Chinese text humanization, removes AI writing traces |
+| 🛠️ **skill-creator** | Development | Guide for creating effective skills |
+| 📝 **update-readme** | Documentation | Automatically updates README/AGENTS files |
+| 🔧 **github-commit** | Version Control | GitHub repository commit management |
+| 📊 **pdf** | Document Processing | Comprehensive PDF manipulation toolkit |
+| 🔄 **github-to-skills** | Skill Management | Converts GitHub repos to AI skills |
+| 📋 **skill-manager** | Skill Management | Lifecycle manager for GitHub-based skills |
+| 🚀 **skill-evolution-manager** | Skill Management | Evolves skills based on user feedback |
 
-**Use when**:
-- Humanizing AI-generated text to sound more natural
-- Removing repetitive AI writing patterns
-- Improving text readability and authenticity
-- Processing text with `/humanizer [text]` command
+## 🏗️ Project Structure
 
-### 🛠️ **skill-creator**
-**Description**: Guide for creating effective skills. This skill should be used when users want to create a new skill (or update an existing skill) that extends Claude's capabilities with specialized knowledge, workflows, or tool integrations.
+```
+./
+├── README.md                    # This index file
+├── README_cn.md                 # Chinese documentation
+├── README_en.md                 # English documentation
+├── AGENTS.md                    # Agent guidelines
+├── skill-creator/              # Skill creation framework
+├── github-commit/              # GitHub commit management
+├── update-readme/              # README/AGENTS updater
+├── paper-detailed-analysis/    # Academic paper analysis
+├── paper-depth-reading/        # Deep paper reading
+├── humanizer/                  # AI text humanization
+├── humanizer-zh/               # Chinese text humanization
+├── pdf/                        # PDF processing toolkit
+├── github-to-skills/           # GitHub to skills converter
+├── skill-manager/              # Skill lifecycle manager
+└── skill-evolution-manager/    # Skill evolution manager
+```
 
-**Use when**:
-- Creating new OpenCode skills
-- Modifying existing skills
-- Understanding skill development patterns
-- Packaging skills for distribution
-
-### 📝 **update-readme**
-**Description**: 根据当前目录内容、git提交记录和现有文档，自动更新README.md和AGENTS.md文件。当需要维护项目文档、同步最新项目状态、或基于代码库变化更新文档时使用此技能。
-
-**Use when**:
-- Project initialization and documentation creation
-- Updating documentation after code changes
-- Regular maintenance of project documentation
-- Synchronizing team collaboration information to documentation
-
-### 🔧 **github-commit**
-**Description**: GitHub仓库提交管理技能，用于检查、验证和提交代码到GitHub仓库。确保代码正确提交到指定的GitHub仓库。
-
-**Use when**:
-- Checking current Git repository status and remote links
-- Verifying or updating GitHub remote repository links
-- Reviewing code changes and generating commit messages
-- Creating commits and optionally pushing to remote repositories
-
-## Quick Start
-
-### For Agentic Coding Agents
-Refer to [AGENTS.md](./AGENTS.md) for comprehensive guidelines on:
-- Build/test commands for each skill
-- Code style guidelines and conventions
-- Skill development patterns
-- File organization standards
-- Development environment setup
+## ⚡ Quick Start
 
 ### For Skill Development
 ```bash
@@ -84,132 +73,32 @@ python skill-creator/scripts/quick_validate.py my-new-skill
 python skill-creator/scripts/package_skill.py my-new-skill
 ```
 
-### For Skill Usage
+### For Skill Management
 ```bash
-# Test a Node.js skill (e.g., humanizer)
-cd humanizer/
-npm test
+# Check for skill updates
+python skill-manager/scripts/scan_and_check.py .
 
-# Run specific test file
-node test.js
+# List all installed skills
+python skill-manager/scripts/list_skills.py .
 
-# Test Python-based skills
-python skill-creator/scripts/quick_validate.py skill-directory
+# Convert a GitHub repo to a skill
+python github-to-skills/scripts/fetch_github_info.py <github_url>
 ```
 
-## Skill Structure
+## 📖 Detailed Documentation
 
-Each skill follows this structure:
-```
-skill-name/
-├── SKILL.md (required)           # YAML frontmatter + instructions
-├── scripts/ (optional)           # Executable code for deterministic tasks
-├── references/ (optional)        # Documentation loaded as needed
-└── assets/ (optional)            # Files used in output (templates, etc.)
-```
+For comprehensive information, please refer to the appropriate language version:
 
-### SKILL.md Requirements
-Every SKILL.md must include:
-```yaml
----
-name: skill-name
-description: Clear description of when to use this skill
----
-```
+- **[README_en.md](./README_en.md)** - Complete English documentation with detailed skill descriptions, usage examples, and development guidelines
+- **[README_cn.md](./README_cn.md)** - 完整中文文档，包含详细的技能描述、使用示例和开发指南
 
-## Development Principles
-
-### Progressive Disclosure
-Skills use a three-level loading system to manage context efficiently:
-1. **Metadata** (name + description) - Always in context (~100 words)
-2. **SKILL.md body** - When skill triggers (<5k words)
-3. **Bundled resources** - As needed by Claude
-
-### Concise is Key
-The context window is a public good. Only add context Claude doesn't already have. Challenge each piece of information: "Does Claude really need this explanation?"
-
-### Appropriate Degrees of Freedom
-Match specificity to task fragility:
-- **High freedom**: Text-based instructions for multiple valid approaches
-- **Medium freedom**: Pseudocode/scripts with parameters for preferred patterns
-- **Low freedom**: Specific scripts for fragile, error-prone operations
-
-## Contributing
-
-### Adding a New Skill
-1. **Understand** the skill with concrete examples
-2. **Plan** reusable contents (scripts, references, assets)
-3. **Initialize** skill with `init_skill.py`
-4. **Edit** the skill - implement resources and write SKILL.md
-5. **Package** skill with `package_skill.py`
-6. **Iterate** based on real usage
-
-### Code Style Guidelines
-- **JavaScript/Node.js**: CommonJS imports, 2-space indentation, camelCase/PascalCase naming
-- **Python**: PEP 8 compliance, 4-space indentation, snake_case naming
-- **Error Handling**: Use try-catch/try-except with meaningful error messages
-
-### File Organization
-- **Skill directories**: kebab-case (e.g., `skill-creator`)
-- **Required files**: Each skill must have `SKILL.md` (or `skill.md`)
-- **Avoid**: README.md, INSTALLATION_GUIDE.md, CHANGELOG.md, etc.
-
-## Project Structure
-
-```
-./
-├── README.md                    # This file
-├── AGENTS.md                    # Agent guidelines (if exists)
-├── skill-creator/              # Skill creation framework
-│   ├── SKILL.md
-│   ├── scripts/
-│   │   ├── init_skill.py
-│   │   ├── quick_validate.py
-│   │   └── package_skill.py
-│   └── references/
-│       ├── workflows.md
-│       └── output-patterns.md
-├── github-commit/              # GitHub commit management
-│   ├── SKILL.md
-│   ├── scripts/
-│   │   ├── check_git_status.py
-│   │   ├── create_commit.py
-│   │   └── update_remote.py
-│   └── references/
-│       ├── git_workflow.md
-│       └── commit_conventions.md
-├── update-readme/              # README/AGENTS.md updater
-│   ├── SKILL.md
-│   ├── scripts/
-│   │   ├── analyze_project.py
-│   │   ├── generate_readme.py
-│   │   ├── update_agents.py
-│   │   └── utils.py
-│   └── references/
-│       ├── README_templates.md
-│       ├── AGENTS_template.md
-│       └── best_practices.md
-├── paper-detailed-analysis/    # Academic paper analysis
-│   └── SKILL.md
-├── paper-depth-reading/        # Deep paper reading
-│   └── SKILL.md
-├── humanizer/                  # AI text humanization
-│   ├── SKILL.md
-│   ├── package.json
-│   ├── humanizer-implementation.js
-│   ├── test.js
-│   └── README.md
-└── .vscode/                    # Development environment
-    └── settings.json
-```
-
-## Resources
+## 🔗 Resources
 
 - [AGENTS.md](./AGENTS.md) - Comprehensive guidelines for agentic coding agents
 - [skill-creator/SKILL.md](./skill-creator/SKILL.md) - Detailed skill creation guide
 - [.vscode/settings.json](./.vscode/settings.json) - Development environment settings
 
-## License
+## 📄 License
 
 Each skill includes its own license information. See individual skill directories for details.
 

@@ -654,8 +654,283 @@ agent health check
 3. 包含环境信息
 4. 建议解决方案
 
+## 🚀 现代AI代理最佳实践 (2025+)
+
+### 1. 代理编排模式
+现代项目使用智能代理编排来处理复杂工作流：
+
+```yaml
+# agent-orchestration.yml
+workflows:
+  code-review:
+    triggers: [pull_request]
+    agents:
+      - explore: "分析代码变更和影响范围"
+      - librarian: "查找相关最佳实践和模式"
+      - oracle: "提供架构建议和优化"
+      - document-writer: "生成变更文档"
+  
+  bug-fix:
+    triggers: [issue_labeled:bug]
+    agents:
+      - explore: "定位问题代码"
+      - librarian: "搜索类似问题和解决方案"
+      - oracle: "设计修复方案"
+      - frontend-ui-ux-engineer: "修复UI问题"
+  
+  feature-development:
+    triggers: [issue_labeled:enhancement]
+    agents:
+      - explore: "分析现有相关代码"
+      - librarian: "研究技术方案"
+      - oracle: "设计架构"
+      - multimodal-looker: "分析设计资产"
+```
+
+### 2. 上下文管理策略
+优化代理上下文使用以提高效率：
+
+```markdown
+## 🧠 上下文管理
+
+### 分层上下文加载
+1. **核心上下文** (始终加载):
+   - 项目结构
+   - 关键配置文件
+   - 主要接口定义
+
+2. **按需上下文** (任务触发时加载):
+   - 相关模块代码
+   - 测试文件
+   - 文档资源
+
+3. **外部上下文** (代理搜索时获取):
+   - 库文档
+   - 最佳实践
+   - 社区解决方案
+
+### 上下文压缩技术
+- 使用代码摘要代替完整文件
+- 提取关键接口和类型
+- 保留最近修改的文件
+- 移除重复和冗余信息
+```
+
+### 3. 代理性能监控
+监控和优化代理性能：
+
+```markdown
+## 📊 代理性能指标
+
+### 关键指标
+- **响应时间**: < 30秒 (简单任务), < 2分钟 (复杂任务)
+- **任务成功率**: > 95%
+- **上下文命中率**: > 80%
+- **用户满意度**: > 4.5/5
+
+### 监控工具
+```bash
+# 监控代理使用情况
+agent-stats --period=7d --format=json
+
+# 分析代理性能
+agent-perf analyze --agent=explore
+
+# 优化上下文使用
+agent-ctx optimize --strategy=smart
+```
+
+### 日志和追踪
+```yaml
+logging:
+  level: INFO
+  format: json
+  fields:
+    - agent_name
+    - task_id  
+    - duration_ms
+    - tokens_used
+    - success
+  storage:
+    type: elasticsearch
+    retention: 30d
+```
+```
+
+### 4. 安全与合规
+确保AI代理使用符合安全和合规要求：
+
+```markdown
+## 🔒 代理安全指南
+
+### 数据保护
+- 禁止向代理发送敏感数据 (API密钥、密码、PII)
+- 使用数据脱敏处理日志和监控
+- 实现数据保留和删除策略
+
+### 访问控制
+```yaml
+access_control:
+  agents:
+    explore: [developers, qa]
+    oracle: [senior-developers, architects]
+    librarian: [all]
+  features:
+    file_write: [senior-developers]
+    production_deploy: [devops]
+    security_scan: [security-team]
+```
+
+### 合规要求
+- 记录所有代理操作和决策
+- 提供人工审核和覆盖机制
+- 遵守数据保护法规 (GDPR, CCPA)
+- 定期进行安全审计
+```
+
+### 5. 代理开发工作流
+现代化代理开发和测试流程：
+
+```markdown
+## 🛠️ 代理开发工作流
+
+### 开发环境
+```bash
+# 设置开发环境
+agent-dev setup --type=explore
+
+# 运行测试
+agent-test run --agent=explore --coverage
+
+# 调试代理
+agent-debug attach --agent=oracle --task-id=xyz
+```
+
+### 测试策略
+- **单元测试**: 测试代理核心逻辑
+- **集成测试**: 测试代理间协作
+- **端到端测试**: 测试完整工作流
+- **性能测试**: 测试响应时间和资源使用
+
+### 部署流程
+1. 开发分支进行功能开发
+2. 测试环境进行集成测试
+3. 预发布环境进行用户验收测试
+4. 生产环境逐步发布 (蓝绿部署)
+```
+
+### 6. 提示工程最佳实践
+优化代理提示以提高结果质量：
+
+```markdown
+## 💡 提示工程指南
+
+### 结构化提示模板
+```markdown
+# 任务: [清晰的任务描述]
+
+## 上下文
+- 项目类型: [前端/后端/库]
+- 技术栈: [React/Node.js/Python]
+- 相关文件: [file1.js, file2.ts]
+
+## 要求
+- 必须遵循: [编码规范、架构模式]
+- 必须包含: [测试、文档、类型定义]
+- 必须避免: [反模式、安全漏洞]
+
+## 输出格式
+- 代码: [语言、格式要求]
+- 文档: [结构、详细程度]
+- 解释: [技术原理、设计决策]
+```
+
+### 提示优化技巧
+1. **明确角色**: "你是一个资深前端工程师，专门研究React性能优化"
+2. **具体约束**: "代码必须通过TypeScript严格模式检查"
+3. **逐步思考**: "首先分析问题，然后设计解决方案，最后实现"
+4. **示例驱动**: "参考以下示例实现类似功能"
+5. **验证要求**: "实现后运行测试并确保所有测试通过"
+```
+
+### 7. 多代理协作模式
+设计有效的多代理协作：
+
+```markdown
+## 🤝 多代理协作模式
+
+### 流水线模式
+```
+用户请求 → explore(分析) → librarian(研究) → oracle(设计) → 实现
+```
+
+### 并行模式
+```
+           → explore(代码分析)
+用户请求 → → librarian(文档研究) → oracle(综合决策)
+           → multimodal(设计分析)
+```
+
+### 评审模式
+```
+实现 → explore(代码审查) → oracle(架构评审) → 用户验收
+```
+
+### 协作配置示例
+```yaml
+collaboration:
+  code-review:
+    primary: explore
+    validators: [oracle, librarian]
+    timeout: 5m
+    consensus: majority
+  
+  feature-development:
+    coordinator: oracle
+    specialists: [explore, librarian, frontend-ui-ux-engineer]
+    communication: shared-context
+    fallback: human-review
+```
+```
+
+### 8. 持续改进机制
+建立代理性能持续改进流程：
+
+```markdown
+## 📈 持续改进
+
+### 反馈收集
+```yaml
+feedback:
+  sources:
+    - user_ratings
+    - task_success_metrics
+    - code_quality_reports
+    - performance_monitoring
+  collection:
+    frequency: realtime
+    storage: feedback_db
+    analysis: weekly
+```
+
+### A/B测试
+```bash
+# 测试新提示策略
+agent-ab-test --variant=new-prompt --metric=success-rate
+
+# 比较代理配置
+agent-compare --config-a=default --config-b=optimized
+```
+
+### 模型更新
+- 定期评估新模型版本
+- 测试模型性能改进
+- 渐进式模型切换
+- 回滚机制保障
+```
+
 ---
 
 *本文档最后更新于：2025-01-22*  
 *维护者：项目团队*  
-*版本：1.0.0*
+*版本：2.0.0 - 现代化更新*

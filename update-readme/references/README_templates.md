@@ -2,91 +2,240 @@
 
 ## 前端项目模板
 
-### React 项目
+### React 项目 (现代最佳实践)
 ```markdown
 # [项目名称]
 
-[项目简短描述]
+[项目简短描述 - 说明项目是什么、解决什么问题、主要技术栈]
+
+![GitHub Actions](https://img.shields.io/github/actions/workflow/status/[username]/[repo]/ci.yml)
+![npm version](https://img.shields.io/npm/v/[package-name])
+![License](https://img.shields.io/github/license/[username]/[repo])
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue)
+![React](https://img.shields.io/badge/React-18+-61dafb)
+![Vite](https://img.shields.io/badge/Vite-5.0+-646cff)
 
 ## 🚀 功能特性
-- 功能1：描述
-- 功能2：描述
-- 功能3：描述
+- **现代化架构**: 基于 React 18 + TypeScript + Vite
+- **性能优化**: 代码分割、懒加载、图片优化
+- **开发体验**: 热重载、TypeScript 支持、ESLint/Prettier
+- **测试完备**: 单元测试、集成测试、E2E 测试
+- **可访问性**: 遵循 WCAG 2.1 AA 标准
+- **响应式设计**: 支持移动端、平板、桌面端
 
-## 📦 安装
+## 📦 快速开始
 
+### 环境要求
+- Node.js 18+ 
+- npm 9+ 或 yarn 1.22+ 或 pnpm 8+
+
+### 安装
 ```bash
 # 克隆仓库
-git clone [仓库地址]
-cd [项目目录]
+git clone https://github.com/[username]/[repo].git
+cd [repo]
 
 # 安装依赖
 npm install
-# 或
+# 或使用 yarn
 yarn install
-# 或
+# 或使用 pnpm
 pnpm install
 ```
 
-## 🎯 使用
-
+### 开发
 ```bash
-# 开发模式
+# 启动开发服务器
 npm run dev
 
+# 在浏览器中打开
+open http://localhost:5173
+```
+
+### 构建
+```bash
 # 构建生产版本
 npm run build
 
-# 运行测试
-npm test
+# 预览构建结果
+npm run preview
 ```
 
-## 🏗️ 项目结构
+## 🏗️ 项目结构 (现代模式)
 
 ```
 project/
-├── public/           # 静态资源
-├── src/             # 源代码
-│   ├── components/  # React组件
-│   ├── pages/       # 页面组件
-│   ├── hooks/       # 自定义Hooks
-│   ├── utils/       # 工具函数
-│   ├── styles/      # 样式文件
-│   └── App.jsx      # 主应用组件
-├── package.json     # 依赖配置
-└── README.md        # 项目说明
+├── public/                    # 静态资源
+│   ├── favicon.ico
+│   ├── robots.txt
+│   └── manifest.json
+├── src/
+│   ├── components/           # 可复用组件
+│   │   ├── ui/              # 基础UI组件 (Button, Input, etc.)
+│   │   ├── layout/          # 布局组件 (Header, Sidebar, etc.)
+│   │   └── features/        # 功能组件
+│   ├── pages/               # 页面组件
+│   ├── hooks/               # 自定义 React Hooks
+│   ├── stores/              # 状态管理 (Zustand/Redux)
+│   ├── services/            # API 服务层
+│   ├── utils/               # 工具函数
+│   ├── types/               # TypeScript 类型定义
+│   ├── styles/              # 样式文件
+│   │   ├── globals.css      # 全局样式
+│   │   └── variables.css    # CSS 变量
+│   ├── constants/           # 常量定义
+│   ├── assets/              # 图片、字体等资源
+│   ├── App.tsx              # 主应用组件
+│   └── main.tsx             # 应用入口
+├── tests/                   # 测试文件
+│   ├── unit/               # 单元测试
+│   ├── integration/        # 集成测试
+│   └── e2e/                # E2E 测试
+├── .github/                # GitHub 配置
+│   └── workflows/          # GitHub Actions
+├── public/                 # 构建输出目录
+├── .env.example            # 环境变量示例
+├── .eslintrc.js            # ESLint 配置
+├── .prettierrc             # Prettier 配置
+├── tsconfig.json           # TypeScript 配置
+├── vite.config.ts          # Vite 配置
+├── package.json            # 依赖配置
+└── README.md               # 项目说明
 ```
 
 ## ⚙️ 配置
 
 ### 环境变量
-创建 `.env` 文件：
+复制 `.env.example` 为 `.env` 并修改：
 ```env
-REACT_APP_API_URL=http://localhost:3000
-REACT_APP_ENV=development
+# API 配置
+VITE_API_URL=http://localhost:3000
+VITE_API_KEY=your_api_key_here
+
+# 功能开关
+VITE_ENABLE_ANALYTICS=false
+VITE_ENABLE_DEBUG=true
+
+# 第三方服务
+VITE_GOOGLE_ANALYTICS_ID=
+VITE_SENTRY_DSN=
 ```
+
+### 性能优化
+项目已配置以下优化：
+- **代码分割**: 自动按路由分割
+- **图片优化**: 自动转换为 WebP 格式
+- **Tree Shaking**: 自动移除未使用代码
+- **缓存策略**: 长期缓存静态资源
 
 ## 🧪 测试
 
 ```bash
-# 运行所有测试
-npm test
+# 运行单元测试
+npm run test:unit
 
-# 运行测试并生成覆盖率报告
-npm test -- --coverage
+# 运行集成测试
+npm run test:integration
+
+# 运行 E2E 测试
+npm run test:e2e
+
+# 运行所有测试并生成覆盖率报告
+npm run test:coverage
+
+# 运行测试并监听文件变化
+npm run test:watch
 ```
 
-## 🤝 贡献
+## 🔧 开发指南
 
-1. Fork 项目
+### 代码规范
+- 使用 TypeScript 严格模式
+- 遵循 Airbnb React 规范
+- 组件使用 PascalCase，函数使用 camelCase
+- 使用函数组件和 React Hooks
+
+### 提交规范
+使用 Conventional Commits：
+```bash
+git commit -m "feat: add user authentication"
+git commit -m "fix: resolve login page crash"
+git commit -m "docs: update API documentation"
+```
+
+### 性能最佳实践
+1. 使用 `React.memo()` 优化组件重渲染
+2. 使用 `useMemo()` 和 `useCallback()` 缓存计算
+3. 实现虚拟列表处理大数据集
+4. 使用代码分割和懒加载
+
+### 可访问性 (A11y)
+- 所有交互元素支持键盘导航
+- 图片包含 alt 文本
+- 使用语义化 HTML 标签
+- 颜色对比度符合 WCAG 标准
+
+## 🚢 部署
+
+### 生产环境
+```bash
+# 构建生产版本
+npm run build
+
+# 部署到 Vercel
+vercel --prod
+
+# 或部署到 Netlify
+netlify deploy --prod
+```
+
+### Docker 部署
+```dockerfile
+# 使用多阶段构建
+FROM node:18-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine
+COPY --from=builder /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+## 🤝 贡献指南
+
+我们欢迎所有贡献！请阅读 [贡献指南](CONTRIBUTING.md)。
+
+### 开发流程
+1. Fork 项目仓库
 2. 创建功能分支 (`git checkout -b feature/amazing-feature`)
-3. 提交更改 (`git commit -m 'Add amazing feature'`)
+3. 提交更改 (`git commit -m 'feat: add amazing feature'`)
 4. 推送到分支 (`git push origin feature/amazing-feature`)
 5. 创建 Pull Request
 
+### 代码审查要求
+- 所有代码必须通过 ESLint 检查
+- 必须添加相应的测试
+- 必须更新相关文档
+- 必须遵循可访问性标准
+
 ## 📄 许可证
 
-本项目基于 [许可证名称] 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情
+本项目基于 [MIT 许可证](LICENSE) - 查看 LICENSE 文件了解详情。
+
+## 🙏 致谢
+- [React](https://reactjs.org/) - UI 库
+- [Vite](https://vitejs.dev/) - 构建工具
+- [TypeScript](https://www.typescriptlang.org/) - 类型安全
+- [所有贡献者](https://github.com/[username]/[repo]/graphs/contributors)
+
+## 📞 支持
+- 报告问题: [GitHub Issues](https://github.com/[username]/[repo]/issues)
+- 讨论: [GitHub Discussions](https://github.com/[username]/[repo]/discussions)
+- 文档: [项目 Wiki](https://github.com/[username]/[repo]/wiki)
 ```
 
 ### Vue 项目
