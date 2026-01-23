@@ -296,11 +296,13 @@ python scripts/create_commit.py . "添加新功能模块" --push
 - 当导入外部Git仓库作为技能时，必须移除.git目录
 - 处理子模块问题时使用git rm --cached命令移除索引记录
 - 重新添加目录时应检查文件模式是否为普通文件(100644)
+- 测试技能进化功能
 
 ### Known Fixes & Workarounds
 - humanizer-zh子模块问题修复流程：1) git rm --cached humanizer-zh 2) rm -rf .git 3) git add humanizer-zh/
 - 确保技能目录不包含独立的Git仓库配置
+- 验证evolution.json文件创建
 
 ### Custom Instruction Injection
 
-在提交代码前，检查是否有目录被错误识别为子模块。使用git ls-files --stage查看文件模式，160000表示子模块，100644表示普通文件。
+测试技能进化管理器的合并功能

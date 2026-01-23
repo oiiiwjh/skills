@@ -1,3 +1,8 @@
+---
+name: humanizer
+description: Removes signs of AI-generated writing from text, making it sound more natural and human. Based on Wikipedia's comprehensive "Signs of AI writing" guide.
+---
+
 # Humanizer Skill for OpenCode
 
 A skill that removes signs of AI-generated writing from text, making it sound more natural and human. Based on Wikipedia's comprehensive "Signs of AI writing" guide.

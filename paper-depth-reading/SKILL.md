@@ -1,6 +1,6 @@
 ---
 name: paper-depth-reading
-description: Comprehensive academic paper analysis skill for computer graphics and AI research papers. Use when Claude needs to perform deep, structured analysis of academic papers with code implementation. Triggers: "analyze this paper", "deep reading of paper", "paper analysis with code", "academic paper review", "research paper breakdown", "paper methodology analysis", "paper implementation details". Provides structured framework for extracting research background, methodology, experiments, and connecting paper concepts to code implementations.
+description: Comprehensive academic paper analysis skill for computer graphics and AI research papers. Use when Claude needs to perform deep, structured analysis of academic papers with code implementation.
 ---
 
 # Paper Depth Reading Skill
