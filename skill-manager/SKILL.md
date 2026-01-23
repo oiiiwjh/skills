@@ -54,3 +54,20 @@ This skill helps you maintain your library of GitHub-wrapped skills by automatin
 This manager relies on the `github-to-skills` metadata standard:
 - `github_url`: Source of truth.
 - `github_hash`: State of truth.
+
+## User-Learned Best Practices & Constraints
+
+> **Auto-Generated Section**: This section is maintained by `skill-evolution-manager`. Do not edit manually.
+
+### User Preferences
+- 技能应按照功能分类展示
+- 建立完整的技能生命周期管理系统
+- 新技能集成后需要更新所有相关文档
+
+### Known Fixes & Workarounds
+- 技能总数统计需要实时更新
+- 项目结构图必须包含所有技能目录
+
+### Custom Instruction Injection
+
+管理技能时：1) 维护技能分类系统 2) 跟踪技能总数变化 3) 确保文档同步 4) 验证技能生态系统完整性

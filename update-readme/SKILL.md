@@ -157,3 +157,21 @@ read: AGENTS.md
 - `assets/example_asset.txt`：示例资产
 
 > **完整资源列表**：查看各目录内容
+
+
+## User-Learned Best Practices & Constraints
+
+> **Auto-Generated Section**: This section is maintained by `skill-evolution-manager`. Do not edit manually.
+
+### User Preferences
+- 主README.md应作为多语言索引页面
+- 详细文档放在语言特定文件中(README_cn.md, README_en.md)
+- 使用清晰的技能分类表格展示所有技能
+
+### Known Fixes & Workarounds
+- 确保所有README文件保持同步更新
+- 项目结构图应包含所有技能目录
+
+### Custom Instruction Injection
+
+更新README时：1) 检查技能总数和分类 2) 更新项目结构图 3) 确保多语言文档一致性 4) 添加新技能的详细描述和使用场景
