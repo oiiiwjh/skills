@@ -346,12 +346,17 @@ python scripts/create_commit.py . "chore: 更新技能依赖"
 - 处理子模块问题时使用git rm --cached命令移除索引记录
 - 重新添加目录时应检查文件模式是否为普通文件(100644)
 - 测试技能进化功能
+- 提交前自动检查git状态
+- 生成详细的提交消息
+- 支持多行提交消息格式
 
 ### Known Fixes & Workarounds
 - humanizer-zh子模块问题修复流程：1) git rm --cached humanizer-zh 2) rm -rf .git 3) git add humanizer-zh/
 - 确保技能目录不包含独立的Git仓库配置
 - 验证evolution.json文件创建
+- 修复推送时没有新更改的警告处理
+- 优化错误消息的清晰度
 
 ### Custom Instruction Injection
 
-测试技能进化管理器的合并功能
+在创建提交前总是显示更改摘要，让用户确认
