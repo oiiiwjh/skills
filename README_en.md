@@ -110,6 +110,15 @@ This repository contains skills for OpenCode agents. Skills are "onboarding guid
 - Preserving experience across skill versions
 - Batch aligning experience data for all skills
 
+### 🌐 **baoyu-url-to-markdown**
+**Description**: Fetch any URL and convert to markdown using Chrome CDP. Supports two modes - auto-capture on page load, or wait for user signal (for pages requiring login). Use when user wants to save a webpage as markdown.
+
+**Use when**:
+- Converting web pages to markdown format
+- Saving online content for offline reading
+- Capturing web content that requires login
+- Archiving web pages with full formatting
+
 ## Quick Start
 
 ### For Agentic Coding Agents
@@ -274,12 +283,16 @@ The three new skills form a complete skill lifecycle management system:
 │   │   ├── list_skills.py
 │   │   ├── delete_skill.py
 │   │   └── update_helper.py
-└── skill-evolution-manager/    # Skill evolution manager
+├── skill-evolution-manager/    # Skill evolution manager
+│   ├── SKILL.md
+│   ├── scripts/
+│   │   ├── merge_evolution.py
+│   │   ├── smart_stitch.py
+│   │   └── align_all.py
+└── baoyu-url-to-markdown/      # URL to markdown converter
     ├── SKILL.md
     ├── scripts/
-    │   ├── merge_evolution.py
-    │   ├── smart_stitch.py
-    │   └── align_all.py
+    │   └── fetch_url_to_markdown.py
 ```
 
 ## Contributing

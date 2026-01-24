@@ -26,17 +26,18 @@ These form a complete skill lifecycle management system:
 
 | Skill | Category | Description |
 |-------|----------|-------------|
-| 📄 **paper-detailed-analysis** | Research | Deep academic paper analysis from PDFs |
-| 📚 **paper-depth-reading** | Research | Comprehensive paper analysis with code connections |
+| 📄 **paper-detailed-analysis** | Research & Analysis | Deep academic paper analysis from PDFs |
+| 📚 **paper-depth-reading** | Research & Analysis | Comprehensive paper analysis with code connections |
 | ✨ **humanizer** | Text Processing | Removes AI writing patterns from text |
 | ✨ **humanizer-zh** | Text Processing | Chinese text humanization, removes AI writing traces |
-| 🛠️ **skill-creator** | Development | Guide for creating effective skills |
+| 🛠️ **skill-creator** | Development Tools | Guide for creating effective skills |
 | 📝 **update-readme** | Documentation | Automatically updates README/AGENTS files |
 | 🔧 **github-commit** | Version Control | GitHub repository commit management |
 | 📊 **pdf** | Document Processing | Comprehensive PDF manipulation toolkit |
 | 🔄 **github-to-skills** | Skill Management | Converts GitHub repos to AI skills |
 | 📋 **skill-manager** | Skill Management | Lifecycle manager for GitHub-based skills |
 | 🚀 **skill-evolution-manager** | Skill Management | Evolves skills based on user feedback |
+| 🌐 **baoyu-url-to-markdown** | Web & Content | Fetch URLs and convert to markdown using Chrome CDP |
 
 ## 🏗️ Project Structure
 
@@ -58,7 +59,8 @@ These form a complete skill lifecycle management system:
 ├── pdf/                        # PDF processing toolkit
 ├── github-to-skills/           # GitHub to skills converter
 ├── skill-manager/              # Skill lifecycle manager
-└── skill-evolution-manager/    # Skill evolution manager
+├── skill-evolution-manager/    # Skill evolution manager
+└── baoyu-url-to-markdown/      # URL to markdown converter
 ```
 
 ## ⚡ Quick Start

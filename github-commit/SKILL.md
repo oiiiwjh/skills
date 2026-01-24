@@ -288,6 +288,55 @@ python scripts/create_commit.py . "添加新功能模块" --push
 3. 更新文档
 4. 提交Pull Request
 
+## 使用示例
+
+### 示例1：检查Git状态并提交
+```bash
+# 检查当前Git状态
+python scripts/check_git_status.py .
+
+# 创建提交（如果状态正常）
+python scripts/create_commit.py . "修复bug: 解决登录问题"
+
+# 推送到远程仓库
+python scripts/create_commit.py . "添加新功能" --push
+```
+
+### 示例2：验证和更新远程仓库
+```bash
+# 验证当前远程仓库配置
+python scripts/check_git_status.py . --verbose
+
+# 更新远程仓库URL
+python scripts/update_remote.py . https://github.com/new-org/new-repo.git
+
+# 验证更新后的配置
+python scripts/check_git_status.py .
+```
+
+### 示例3：批量提交工作流
+```bash
+# 1. 检查所有更改
+python scripts/check_git_status.py . --detailed
+
+# 2. 生成有意义的提交消息
+python scripts/create_commit.py . "feat: 添加用户认证系统\n\n- 实现JWT令牌验证\n- 添加用户注册/登录API\n- 集成权限管理系统"
+
+# 3. 推送到生产分支
+python scripts/create_commit.py . "发布v1.2.0" --push --branch main
+```
+
+### 示例4：与其他技能协同工作
+```bash
+# 与update-readme技能协同
+python update-readme/scripts/analyze_project.py .
+python scripts/create_commit.py . "docs: 更新项目文档"
+
+# 与skill-manager协同
+python skill-manager/scripts/scan_and_check.py .
+python scripts/create_commit.py . "chore: 更新技能依赖"
+```
+
 ## User-Learned Best Practices & Constraints
 
 > **Auto-Generated Section**: This section is maintained by `skill-evolution-manager`. Do not edit manually.

@@ -55,6 +55,98 @@ This manager relies on the `github-to-skills` metadata standard:
 - `github_url`: Source of truth.
 - `github_hash`: State of truth.
 
+## Skill Synergy Examples
+
+### Working with github-to-skills
+```bash
+# After creating a skill with github-to-skills, register it with skill-manager
+python github-to-skills/scripts/fetch_github_info.py https://github.com/username/repo.git
+python skill-manager/scripts/scan_and_check.py .
+```
+
+### Working with skill-evolution-manager
+```bash
+# After skill-manager updates a skill, restore evolution data
+python skill-manager/scripts/scan_and_check.py .
+python skill-evolution-manager/scripts/smart_stitch.py updated-skill-name
+```
+
+### Working with update-readme
+```bash
+# After adding new skills, update documentation
+python skill-manager/scripts/list_skills.py .
+python update-readme/scripts/analyze_project.py .
+```
+
+## 使用示例
+
+### 示例1：列出所有技能
+```bash
+# 列出所有已安装技能
+python scripts/list_skills.py .
+
+# 输出示例：
+# Skill Name           | Type         | Description                              | Ver     
+# -----------------------------------------------------------------------------------------
+# github-to-skills     | Standard     | Automated factory for converting GitH... | 0.1.0   
+# skill-manager        | Standard     | Lifecycle manager for GitHub-based sk... | 0.1.0   
+# paper-detailed-analysis | Standard     | 深度论文分析技能... | 0.1.0
+```
+
+### 示例2：检查技能更新
+```bash
+# 扫描所有技能检查GitHub更新
+python scripts/scan_and_check.py .
+
+# 输出示例：
+# [{
+#   "skill": "github-to-skills",
+#   "local_hash": "abc123",
+#   "remote_hash": "def456",
+#   "needs_update": true,
+#   "update_url": "https://github.com/KKKKhazix/Khaziz-Skills.git"
+# }]
+```
+
+### 示例3：删除不需要的技能
+```bash
+# 删除指定技能
+python scripts/delete_skill.py old-skill-name
+
+# 确认删除
+python scripts/list_skills.py .
+```
+
+### 示例4：批量管理技能
+```bash
+# 1. 列出所有技能
+python scripts/list_skills.py . --detailed
+
+# 2. 检查所有GitHub技能的更新
+python scripts/scan_and_check.py . --verbose
+
+# 3. 更新需要升级的技能
+# (根据scan_and_check的输出手动更新)
+
+# 4. 验证更新结果
+python scripts/list_skills.py .
+```
+
+### 示例5：与其他技能协同工作
+```bash
+# 与github-to-skills协同
+python github-to-skills/scripts/fetch_github_info.py https://github.com/new/tool.git
+python scripts/scan_and_check.py .
+
+# 与skill-evolution-manager协同
+python scripts/scan_and_check.py .
+python skill-evolution-manager/scripts/align_all.py
+
+# 与update-readme协同
+python scripts/list_skills.py .
+python update-readme/scripts/analyze_project.py .
+```
+
 ## User-Learned Best Practices & Constraints
 
 > **Auto-Generated Section**: This section is maintained by `skill-evolution-manager`. Do not edit manually.

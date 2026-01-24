@@ -126,3 +126,106 @@ Files not intended to be loaded into context, but rather used within the output 
 ---
 
 **Any unneeded directories can be deleted.** Not every skill requires all three types of resources.
+
+## 使用示例
+
+### 示例1：计算机图形学论文分析
+**论文**: "NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis"
+
+**分析框架**:
+1. **研究背景**: 神经渲染、3D场景表示、视图合成
+2. **核心方法**: 
+   - 神经辐射场表示
+   - 体积渲染公式
+   - 位置编码技术
+3. **实验设计**:
+   - 数据集: Synthetic NeRF, Realistic Synthetic 360°
+   - 评估指标: PSNR, SSIM, LPIPS
+   - 对比方法: SRN, NV, LLFF
+4. **代码连接**:
+   - 官方实现: https://github.com/bmild/nerf
+   - 关键组件: run_nerf.py, train()函数
+   - 扩展实现: InstantNGP, Plenoxels
+
+### 示例2：AI研究论文分析
+**论文**: "Attention Is All You Need" (Transformer架构)
+
+**分析框架**:
+1. **研究背景**: 序列建模、机器翻译、注意力机制
+2. **核心方法**:
+   - 自注意力机制
+   - 多头注意力
+   - 位置编码
+   - 前馈网络
+3. **实验设计**:
+   - 任务: WMT 2014英德/英法翻译
+   - 评估: BLEU分数
+   - 消融实验: 注意力头数、模型深度
+4. **代码连接**:
+   - 官方实现: Tensor2Tensor库
+   - PyTorch实现: nn.Transformer模块
+   - 关键类: MultiHeadAttention, TransformerEncoder
+
+### 示例3：计算机视觉论文分析
+**论文**: "Mask R-CNN"
+
+**分析框架**:
+1. **研究背景**: 目标检测、实例分割、Faster R-CNN
+2. **核心方法**:
+   - ROIAlign操作
+   - 掩码分支
+   - 多任务损失函数
+3. **实验设计**:
+   - 数据集: COCO, Cityscapes
+   - 评估指标: AP, AP50, AP75
+   - 消融实验: ROIAlign vs ROIPool
+4. **代码连接**:
+   - Detectron2框架
+   - mmdetection实现
+   - 关键组件: MaskRCNN类, ROIAlign层
+
+### 示例4：分析工作流程
+```python
+# 伪代码示例：论文分析流程
+def analyze_paper(paper_pdf):
+    # 1. 提取基本信息
+    metadata = extract_metadata(paper_pdf)
+    
+    # 2. 分析方法论
+    methodology = analyze_methodology(paper_pdf)
+    
+    # 3. 提取实验设计
+    experiments = extract_experiments(paper_pdf)
+    
+    # 4. 连接代码实现
+    code_connections = find_code_connections(metadata['title'])
+    
+    # 5. 生成结构化报告
+    report = generate_report(
+        metadata=metadata,
+        methodology=methodology,
+        experiments=experiments,
+        code_connections=code_connections
+    )
+    
+    return report
+```
+
+### 示例5：与其他技能协同
+```bash
+# 使用paper-detailed-analysis提取PDF内容
+# (假设paper-detailed-analysis提供PDF解析功能)
+
+# 使用github-to-skills查找相关代码库
+python github-to-skills/scripts/fetch_github_info.py https://github.com/author/paper-implementation.git
+
+# 使用update-readme记录分析结果
+python update-readme/scripts/analyze_project.py research-folder/
+
+# 使用skill-evolution-manager保存分析模式
+python skill-evolution-manager/scripts/merge_evolution.py paper-depth-reading '{
+  "preferences": ["优先分析创新点", "关注实验可复现性"],
+  "fixes": ["修复公式解析问题"],
+  "custom_prompts": "为每篇论文生成技术迁移建议"
+}'
+```

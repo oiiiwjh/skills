@@ -110,6 +110,15 @@
 - 跨技能版本保持经验不丢失
 - 批量对齐所有技能的经验数据
 
+### 🌐 **baoyu-url-to-markdown** (URL转Markdown)
+**描述**: 使用Chrome CDP获取任何URL并将其转换为markdown。支持两种模式 - 页面加载时自动捕获，或等待用户信号（对于需要登录的页面）。当用户想要将网页保存为markdown时使用此技能。
+
+**使用场景**:
+- 将网页转换为markdown格式
+- 保存在线内容以供离线阅读
+- 捕获需要登录的网页内容
+- 以完整格式存档网页
+
 ## 快速开始
 
 ### 对于代理化编码代理
@@ -274,12 +283,16 @@ description: 何时使用此技能的清晰描述
 │   │   ├── list_skills.py
 │   │   ├── delete_skill.py
 │   │   └── update_helper.py
-└── skill-evolution-manager/    # 技能进化管理器
+├── skill-evolution-manager/    # 技能进化管理器
+│   ├── SKILL.md
+│   ├── scripts/
+│   │   ├── merge_evolution.py
+│   │   ├── smart_stitch.py
+│   │   └── align_all.py
+└── baoyu-url-to-markdown/      # URL转Markdown转换器
     ├── SKILL.md
     ├── scripts/
-    │   ├── merge_evolution.py
-    │   ├── smart_stitch.py
-    │   └── align_all.py
+    │   └── fetch_url_to_markdown.py
 ```
 
 ## 贡献
