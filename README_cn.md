@@ -145,6 +145,19 @@ node test.js
 
 # 测试Python基础技能
 python skill-creator/scripts/quick_validate.py skill-directory
+
+# 列出所有已安装技能
+python skill-manager/scripts/list_skills.py .
+
+# 检查技能更新
+python skill-manager/scripts/scan_and_check.py .
+
+# 将GitHub仓库转换为技能
+python github-to-skills/scripts/fetch_github_info.py https://github.com/username/repo.git
+
+# 基于反馈进化技能
+python skill-evolution-manager/scripts/merge_evolution.py skill-name '{"preferences": ["用户偏好"], "fixes": ["已知修复"], "custom_prompts": "自定义指令"}'
+python skill-evolution-manager/scripts/smart_stitch.py skill-name
 ```
 
 ## 技能结构
@@ -293,6 +306,9 @@ description: 何时使用此技能的清晰描述
 
 - [AGENTS.md](./AGENTS.md) - 代理化编码代理的全面指南
 - [skill-creator/SKILL.md](./skill-creator/SKILL.md) - 详细的技能创建指南
+- [skill-manager/SKILL.md](./skill-manager/SKILL.md) - 技能生命周期管理指南
+- [skill-evolution-manager/SKILL.md](./skill-evolution-manager/SKILL.md) - 技能进化管理指南
+- [github-to-skills/SKILL.md](./github-to-skills/SKILL.md) - GitHub到技能转换指南
 - [.vscode/settings.json](./.vscode/settings.json) - 开发环境设置
 
 ## 许可证

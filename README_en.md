@@ -145,6 +145,19 @@ node test.js
 
 # Test Python-based skills
 python skill-creator/scripts/quick_validate.py skill-directory
+
+# List all installed skills
+python skill-manager/scripts/list_skills.py .
+
+# Check for skill updates
+python skill-manager/scripts/scan_and_check.py .
+
+# Convert GitHub repo to skill
+python github-to-skills/scripts/fetch_github_info.py https://github.com/username/repo.git
+
+# Evolve skills based on feedback
+python skill-evolution-manager/scripts/merge_evolution.py skill-name '{"preferences": ["user preferences"], "fixes": ["known fixes"], "custom_prompts": "custom instructions"}'
+python skill-evolution-manager/scripts/smart_stitch.py skill-name
 ```
 
 ## Skill Structure
@@ -293,6 +306,9 @@ The three new skills form a complete skill lifecycle management system:
 
 - [AGENTS.md](./AGENTS.md) - Comprehensive guidelines for agentic coding agents
 - [skill-creator/SKILL.md](./skill-creator/SKILL.md) - Detailed skill creation guide
+- [skill-manager/SKILL.md](./skill-manager/SKILL.md) - Skill lifecycle management guide
+- [skill-evolution-manager/SKILL.md](./skill-evolution-manager/SKILL.md) - Skill evolution management guide
+- [github-to-skills/SKILL.md](./github-to-skills/SKILL.md) - GitHub to skills conversion guide
 - [.vscode/settings.json](./.vscode/settings.json) - Development environment settings
 
 ## License

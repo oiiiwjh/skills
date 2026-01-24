@@ -200,7 +200,7 @@ Skills should use a three-level loading system:
 
 ## Common Tasks and Commands
 
-### Skill Creation
+### Skill Creation and Management
 ```bash
 # Initialize new skill
 python skill-creator/scripts/init_skill.py my-new-skill --path .
@@ -210,6 +210,19 @@ python skill-creator/scripts/quick_validate.py my-new-skill
 
 # Package skill for distribution
 python skill-creator/scripts/package_skill.py my-new-skill
+
+# List all installed skills
+python skill-manager/scripts/list_skills.py .
+
+# Check for skill updates
+python skill-manager/scripts/scan_and_check.py .
+
+# Convert GitHub repo to skill
+python github-to-skills/scripts/fetch_github_info.py https://github.com/username/repo.git
+
+# Evolve skills based on feedback
+python skill-evolution-manager/scripts/merge_evolution.py skill-name '{"preferences": ["user preferences"], "fixes": ["known fixes"], "custom_prompts": "custom instructions"}'
+python skill-evolution-manager/scripts/smart_stitch.py skill-name
 ```
 
 ### Documentation Updates

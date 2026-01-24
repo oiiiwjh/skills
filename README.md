@@ -46,6 +46,8 @@ These form a complete skill lifecycle management system:
 ├── README_cn.md                 # Chinese documentation
 ├── README_en.md                 # English documentation
 ├── AGENTS.md                    # Agent guidelines
+├── .vscode/                     # Development environment settings
+├── .git/                        # Git repository
 ├── skill-creator/              # Skill creation framework
 ├── github-commit/              # GitHub commit management
 ├── update-readme/              # README/AGENTS updater
@@ -83,6 +85,10 @@ python skill-manager/scripts/list_skills.py .
 
 # Convert a GitHub repo to a skill
 python github-to-skills/scripts/fetch_github_info.py <github_url>
+
+# Evolve skills based on user feedback
+python skill-evolution-manager/scripts/merge_evolution.py <skill_name> '{"preferences": ["user preferences"], "fixes": ["known fixes"], "custom_prompts": "custom instructions"}'
+python skill-evolution-manager/scripts/smart_stitch.py <skill_name>
 ```
 
 ## 📖 Detailed Documentation
@@ -97,6 +103,8 @@ For comprehensive information, please refer to the appropriate language version:
 - [AGENTS.md](./AGENTS.md) - Comprehensive guidelines for agentic coding agents
 - [skill-creator/SKILL.md](./skill-creator/SKILL.md) - Detailed skill creation guide
 - [.vscode/settings.json](./.vscode/settings.json) - Development environment settings
+- [skill-manager/SKILL.md](./skill-manager/SKILL.md) - Skill lifecycle management guide
+- [skill-evolution-manager/SKILL.md](./skill-evolution-manager/SKILL.md) - Skill evolution management guide
 
 ## 📄 License
 
