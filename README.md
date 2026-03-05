@@ -103,6 +103,16 @@ python skill-evolution-manager/scripts/merge_evolution.py <skill_name> '{"prefer
 python skill-evolution-manager/scripts/smart_stitch.py <skill_name>
 ```
 
+## ⚠️ Breaking CLI Changes (2026-03)
+
+| Script | Old | New |
+|-------|-----|-----|
+| `skill-evolution-manager/scripts/align_all.py` | default `~/.claude/skills` | default inferred repo root, or explicit `[skills_root]` |
+| `github-commit/scripts/update_remote.py` | interactive confirm | non-interactive upsert + optional `--json` |
+| `github-commit/scripts/check_git_status.py` | plain text only | supports `--history-limit` and `--json` |
+| `github-commit/scripts/create_commit.py` | `--push` only | supports `--push --remote <name> --json` |
+| `update-readme/scripts/*` | mixed return behavior | unified exit codes: `0` success, `1` runtime, `2` argument |
+
 ## 🧭 Skill Directory Policy
 
 - Canonical source directory for real skills: `~/.agents/skills`

@@ -193,6 +193,16 @@ python skill-evolution-manager/scripts/merge_evolution.py skill-name '{"preferen
 python skill-evolution-manager/scripts/smart_stitch.py skill-name
 ```
 
+## 破坏性 CLI 变更（2026-03）
+
+| 脚本 | 旧行为 | 新行为 |
+|---|---|---|
+| `skill-evolution-manager/scripts/align_all.py` | 默认扫描 `~/.claude/skills` | 默认推断仓库根目录，也支持显式传 `[skills_root]` |
+| `github-commit/scripts/update_remote.py` | 交互确认更新 | 非交互远程 upsert，支持 `--json` |
+| `github-commit/scripts/check_git_status.py` | 仅文本输出 | 支持 `--history-limit` 与 `--json` |
+| `github-commit/scripts/create_commit.py` | 基础 `--push` | 支持 `--push --remote <name> --json` |
+| `update-readme/scripts/*` | 退出码不统一 | 统一为 `0` 成功、`1` 运行时错误、`2` 参数错误 |
+
 ## 技能结构
 
 每个技能遵循以下结构：
