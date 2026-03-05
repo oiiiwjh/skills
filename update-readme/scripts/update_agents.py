@@ -6,6 +6,7 @@ AGENTS.md 更新工具
 
 import os
 import json
+import sys
 import yaml
 import re
 from pathlib import Path
@@ -508,8 +509,13 @@ def main():
     parser.add_argument('--project-data', help='项目分析数据JSON文件')
     parser.add_argument('--output', default='AGENTS.md', help='输出文件路径')
     parser.add_argument('--update', action='store_true', help='更新现有文件')
+    parser.add_argument('--json', action='store_true', help='以JSON输出执行结果')
     
-    args = parser.parse_args()
+    try:
+        args = parser.parse_args()
+    except SystemExit as exc:
+        code = int(str(exc) or 0)
+        return 2 if code != 0 else 0
     
     # 加载项目数据
     project_data = {}
@@ -518,7 +524,16 @@ def main():
             with open(args.project_data, 'r', encoding='utf-8') as f:
                 project_data = json.load(f)
         except (FileNotFoundError, json.JSONDecodeError):
-            print(f"⚠️  无法加载项目数据，使用默认配置")
+            if args.json:
+                print(
+                    json.dumps(
+                        {"status": "warning", "warning": "无法加载项目数据，使用默认配置"},
+                        ensure_ascii=False,
+                    ),
+                    file=sys.stderr,
+                )
+            else:
+                print(f"⚠️  无法加载项目数据，使用默认配置")
     
     # 创建更新器
     output_dir = Path(args.output).parent
@@ -543,19 +558,30 @@ def main():
         output_path.parent.mkdir(parents=True, exist_ok=True)
         with open(output_path, 'w', encoding='utf-8') as f:
             f.write(new_content)
-        
-        print(f"✅ AGENTS.md 已更新: {output_path}")
-        
-        # 显示统计信息
+
         agent_count = len(updater.agent_configs.get("agents", {}))
         config_count = len(updater.agent_configs.get("files", []))
-        
-        print(f"📊 统计:")
-        print(f"   检测到代理配置: {agent_count} 个")
-        print(f"   配置文件: {config_count} 个")
-        
+
+        result = {
+            "status": "ok",
+            "output": str(output_path),
+            "agent_count": agent_count,
+            "config_count": config_count,
+        }
+        if args.json:
+            print(json.dumps(result, ensure_ascii=False))
+        else:
+            print(f"✅ AGENTS.md 已更新: {output_path}")
+            print(f"📊 统计:")
+            print(f"   检测到代理配置: {agent_count} 个")
+            print(f"   配置文件: {config_count} 个")
+        return 0
     except Exception as e:
-        print(f"❌ 写入文件失败: {e}")
+        if args.json:
+            print(json.dumps({"status": "error", "error": str(e)}, ensure_ascii=False), file=sys.stderr)
+        else:
+            print(f"❌ 写入文件失败: {e}", file=sys.stderr)
+        return 1
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())

@@ -470,40 +470,49 @@ class ProjectAnalyzer:
 def main():
     """主函数"""
     import argparse
+    import io
+    from contextlib import redirect_stdout
     
     parser = argparse.ArgumentParser(description='分析项目结构')
     parser.add_argument('path', nargs='?', default='.', help='项目路径（默认当前目录）')
     parser.add_argument('--json', action='store_true', help='输出JSON格式')
     parser.add_argument('--output', help='输出到文件')
     
-    args = parser.parse_args()
-    
-    analyzer = ProjectAnalyzer(args.path)
-    result = analyzer.analyze()
-    
+    try:
+        args = parser.parse_args()
+    except SystemExit as exc:
+        code = int(str(exc) or 0)
+        return 2 if code != 0 else 0
+
+    try:
+        analyzer = ProjectAnalyzer(args.path)
+        result = analyzer.analyze()
+    except Exception as e:
+        if args.json:
+            print(json.dumps({"status": "error", "error": str(e)}, ensure_ascii=False), file=sys.stderr)
+        else:
+            print(f"❌ 分析失败: {e}", file=sys.stderr)
+        return 1
+
+    output = None
     if args.json:
-        output = json.dumps(result, indent=2, ensure_ascii=False)
+        output = json.dumps(result, ensure_ascii=False)
+        print(output)
     else:
         analyzer.print_report()
-        output = None
-    
+
     if args.output and output:
         with open(args.output, 'w', encoding='utf-8') as f:
             f.write(output)
         print(f"\n📄 结果已保存到: {args.output}")
     elif args.output and not output:
-        # 保存非JSON格式的报告
-        import io
-        from contextlib import redirect_stdout
-        
         f = io.StringIO()
         with redirect_stdout(f):
             analyzer.print_report()
-        
         with open(args.output, 'w', encoding='utf-8') as out_file:
             out_file.write(f.getvalue())
-        
         print(f"\n📄 报告已保存到: {args.output}")
+    return 0
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())

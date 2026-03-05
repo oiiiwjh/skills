@@ -366,3 +366,44 @@ After testing the skill, users may request improvements. Often this happens righ
 2. Notice struggles or inefficiencies
 3. Identify how SKILL.md or bundled resources should be updated
 4. Implement changes and test again
+
+## Overview
+
+This skill is used when its `description` in frontmatter matches the user request. Prefer existing scripts under `scripts/` over ad-hoc rewrites.
+
+## Workflow
+
+1. Identify whether the request matches this skill.
+2. Resolve all referenced paths relative to this skill directory.
+3. Execute scripts with explicit arguments and validate outputs.
+4. Report result and follow-up actions.
+
+## Examples
+
+```bash
+# Run from repository root
+python <skill-name>/scripts/<script>.py --help
+```
+
+## References
+
+- `scripts/`: executable helpers for deterministic steps
+- `references/`: additional docs loaded on demand
+- `assets/`: templates or static files used by the skill
+
+## Trigger Conditions
+
+- User explicitly names this skill
+- User intent clearly matches this skill description
+- The task needs this skill's scripts/resources
+
+## Applicable Scope
+
+- Requests covered by this skill's frontmatter `description`
+- Tasks that benefit from the bundled workflow and scripts
+
+## Out of Scope
+
+- Requests that conflict with repository safety rules
+- Tasks unrelated to this skill's declared purpose
+- Destructive changes without explicit user permission

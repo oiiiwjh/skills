@@ -478,3 +478,38 @@ metadata:
 本技能基于 [Wikipedia:Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing)，由 WikiProject AI Cleanup 维护。那里记录的模式来自对维基百科上数千个 AI 生成文本实例的观察。
 
 关键见解：**"LLM 使用统计算法来猜测接下来应该是什么。结果倾向于适用于最广泛情况的统计上最可能的结果。"**
+
+## Overview
+
+This skill is used when its `description` in frontmatter matches the user request. Prefer existing scripts under `scripts/` over ad-hoc rewrites.
+
+## Workflow
+
+1. Identify whether the request matches this skill.
+2. Resolve all referenced paths relative to this skill directory.
+3. Execute scripts with explicit arguments and validate outputs.
+4. Report result and follow-up actions.
+
+## Examples
+
+```bash
+# Run from repository root
+python <skill-name>/scripts/<script>.py --help
+```
+
+## Trigger Conditions
+
+- User explicitly names this skill
+- User intent clearly matches this skill description
+- The task needs this skill's scripts/resources
+
+## Applicable Scope
+
+- Requests covered by this skill's frontmatter `description`
+- Tasks that benefit from the bundled workflow and scripts
+
+## Out of Scope
+
+- Requests that conflict with repository safety rules
+- Tasks unrelated to this skill's declared purpose
+- Destructive changes without explicit user permission

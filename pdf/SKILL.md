@@ -292,3 +292,40 @@ with open("encrypted.pdf", "wb") as output:
 - For JavaScript libraries (pdf-lib), see reference.md
 - If you need to fill out a PDF form, follow the instructions in forms.md
 - For troubleshooting guides, see reference.md
+
+## Workflow
+
+1. Identify whether the request matches this skill.
+2. Resolve all referenced paths relative to this skill directory.
+3. Execute scripts with explicit arguments and validate outputs.
+4. Report result and follow-up actions.
+
+## Examples
+
+```bash
+# Run from repository root
+python <skill-name>/scripts/<script>.py --help
+```
+
+## References
+
+- `scripts/`: executable helpers for deterministic steps
+- `references/`: additional docs loaded on demand
+- `assets/`: templates or static files used by the skill
+
+## Trigger Conditions
+
+- User explicitly names this skill
+- User intent clearly matches this skill description
+- The task needs this skill's scripts/resources
+
+## Applicable Scope
+
+- Requests covered by this skill's frontmatter `description`
+- Tasks that benefit from the bundled workflow and scripts
+
+## Out of Scope
+
+- Requests that conflict with repository safety rules
+- Tasks unrelated to this skill's declared purpose
+- Destructive changes without explicit user permission

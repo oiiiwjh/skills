@@ -1,158 +1,140 @@
 #!/usr/bin/env python3
-"""
-更新Git远程仓库链接的脚本
-"""
+"""Add or update a git remote with validation and optional JSON output."""
 
-import subprocess
-import sys
+from __future__ import annotations
+
+import argparse
+import json
 import os
 import re
-from typing import Dict, List, Tuple, Any
+import subprocess
+import sys
+from typing import Any
 
-def run_git_command(command, cwd=None):
-    """运行git命令并返回输出"""
+EXIT_OK = 0
+EXIT_RUNTIME = 1
+EXIT_USAGE = 2
+
+
+def run_git_command(args: list[str], cwd: str) -> tuple[int, str, str]:
     try:
         result = subprocess.run(
-            command,
-            shell=True,
+            ["git", *args],
+            cwd=cwd,
             capture_output=True,
             text=True,
-            cwd=cwd,
-            env={**os.environ, 'GIT_TERMINAL_PROMPT': '0'}
+            env={**os.environ, "GIT_TERMINAL_PROMPT": "0"},
         )
         return result.returncode, result.stdout.strip(), result.stderr.strip()
-    except Exception as e:
-        return 1, "", str(e)
+    except Exception as exc:
+        return EXIT_RUNTIME, "", str(exc)
 
-def validate_github_url(url):
-    """验证GitHub URL格式"""
+
+def validate_github_url(url: str) -> tuple[bool, str]:
     if not url:
-        return False, "URL不能为空"
-    
-    # 检查是否是有效的GitHub URL
-    github_patterns = [
-        r'^https://github\.com/[\w\-]+/[\w\-]+(\.git)?$',
-        r'^git@github\.com:[\w\-]+/[\w\-]+(\.git)?$'
+        return False, "URL cannot be empty"
+    patterns = [
+        r"^https://github\.com/[\w\-.]+/[\w\-.]+(\.git)?$",
+        r"^git@github\.com:[\w\-.]+/[\w\-.]+(\.git)?$",
     ]
-    
-    for pattern in github_patterns:
+    for pattern in patterns:
         if re.match(pattern, url):
             return True, ""
-    
-    return False, "无效的GitHub URL格式。支持格式：\n- https://github.com/用户名/仓库名.git\n- git@github.com:用户名/仓库名.git"
+    return False, "invalid GitHub URL format"
 
-def get_remotes(cwd=None) -> Dict[str, List[Dict[str, str]]]:
-    """获取所有远程仓库"""
-    return_code, stdout, stderr = run_git_command("git remote -v", cwd)
-    if return_code != 0:
+
+def get_remote_map(cwd: str) -> dict[str, str]:
+    code, stdout, _ = run_git_command(["remote", "-v"], cwd)
+    if code != 0:
         return {}
-    
-    remotes: Dict[str, List[Dict[str, str]]] = {}
-    for line in stdout.split('\n'):
-        if line:
-            parts = line.split()
-            if len(parts) >= 2:
-                remote_name = parts[0]
-                remote_url = parts[1]
-                remote_type = parts[2] if len(parts) > 2 else 'unknown'
-                
-                if remote_name not in remotes:
-                    remotes[remote_name] = []
-                remotes[remote_name].append({
-                    'url': remote_url,
-                    'type': remote_type
-                })
-    
+    remotes: dict[str, str] = {}
+    for line in stdout.splitlines():
+        parts = line.split()
+        if len(parts) >= 2 and parts[0] not in remotes:
+            remotes[parts[0]] = parts[1]
     return remotes
 
-def add_remote(name, url, cwd=None):
-    """添加远程仓库"""
-    return run_git_command(f"git remote add {name} {url}", cwd)
 
-def update_remote(name, url, cwd=None):
-    """更新远程仓库URL"""
-    # 先删除旧的远程仓库
-    return_code, stdout, stderr = run_git_command(f"git remote remove {name}", cwd)
-    if return_code != 0:
-        return return_code, stdout, stderr
-    
-    # 添加新的远程仓库
-    return add_remote(name, url, cwd)
+def ensure_git_repo(cwd: str) -> None:
+    code, _, stderr = run_git_command(["rev-parse", "--is-inside-work-tree"], cwd)
+    if code != 0:
+        raise RuntimeError(stderr or "not a git repository")
 
-def remove_remote(name, cwd=None):
-    """删除远程仓库"""
-    return run_git_command(f"git remote remove {name}", cwd)
 
-def test_remote_connection(name, cwd=None):
-    """测试远程仓库连接"""
-    return run_git_command(f"git ls-remote {name}", cwd)
+def upsert_remote(cwd: str, remote_name: str, remote_url: str) -> dict[str, Any]:
+    ensure_git_repo(cwd)
+    remotes = get_remote_map(cwd)
 
-def main():
-    """主函数"""
-    if len(sys.argv) < 4:
-        print("用法: python update_remote.py <目录> <远程名称> <GitHub URL>")
-        print("示例: python update_remote.py . origin https://github.com/username/repo.git")
-        return 1
-    
-    cwd = sys.argv[1]
-    remote_name = sys.argv[2]
-    github_url = sys.argv[3]
-    
-    if not os.path.exists(cwd):
-        print(f"❌ 目录不存在: {cwd}")
-        return 1
-    
-    # 验证GitHub URL
-    is_valid, error_msg = validate_github_url(github_url)
-    if not is_valid:
-        print(f"❌ {error_msg}")
-        return 1
-    
-    # 检查是否是Git仓库
-    return_code, stdout, stderr = run_git_command("git rev-parse --is-inside-work-tree", cwd)
-    if return_code != 0:
-        print("❌ 不是Git仓库")
-        return 1
-    
-    # 获取当前远程仓库
-    remotes = get_remotes(cwd)
-    
     if remote_name in remotes:
-        print(f"⚠️  远程仓库 '{remote_name}' 已存在")
-        current_urls = [r['url'] for r in remotes[remote_name]]
-        if current_urls:
-            print(f"   当前URL: {current_urls[0]}")
-        print(f"   新URL: {github_url}")
-        
-        confirm = input("是否更新？(y/N): ").strip().lower()
-        if confirm != 'y':
-            print("❌ 操作取消")
-            return 0
-        
-        # 更新远程仓库
-        print(f"🔄 更新远程仓库 '{remote_name}'...")
-        return_code, stdout, stderr = update_remote(remote_name, github_url, cwd)
+        code, _, stderr = run_git_command(["remote", "set-url", remote_name, remote_url], cwd)
+        action = "updated"
+        old_url = remotes[remote_name]
     else:
-        # 添加新的远程仓库
-        print(f"➕ 添加远程仓库 '{remote_name}'...")
-        return_code, stdout, stderr = add_remote(remote_name, github_url, cwd)
-    
-    if return_code != 0:
-        print(f"❌ 操作失败: {stderr}")
-        return return_code
-    
-    print(f"✅ 操作成功: {stdout}")
-    
-    # 测试连接
-    print(f"🔗 测试远程连接...")
-    return_code, stdout, stderr = test_remote_connection(remote_name, cwd)
-    if return_code == 0:
-        print("✅ 远程连接测试成功")
+        code, _, stderr = run_git_command(["remote", "add", remote_name, remote_url], cwd)
+        action = "added"
+        old_url = None
+
+    if code != 0:
+        raise RuntimeError(stderr or "failed to update remote")
+
+    test_code, _, test_err = run_git_command(["ls-remote", remote_name], cwd)
+    return {
+        "status": "ok",
+        "action": action,
+        "cwd": os.path.abspath(cwd),
+        "remote": remote_name,
+        "old_url": old_url,
+        "new_url": remote_url,
+        "connection_test": "ok" if test_code == 0 else "failed",
+        "connection_error": test_err if test_code != 0 else "",
+    }
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Add or update a git remote")
+    parser.add_argument("path", help="Repository path")
+    parser.add_argument("remote", help="Remote name, e.g. origin")
+    parser.add_argument("url", help="GitHub SSH/HTTPS remote URL")
+    parser.add_argument("--json", action="store_true", help="Emit machine-readable JSON output")
+    return parser
+
+
+def main() -> int:
+    parser = build_parser()
+    try:
+        args = parser.parse_args()
+    except SystemExit as exc:
+        code = int(str(exc) or 0)
+        return EXIT_USAGE if code != 0 else EXIT_OK
+
+    if not os.path.exists(args.path):
+        print(f"Error: directory not found: {args.path}", file=sys.stderr)
+        return EXIT_RUNTIME
+
+    valid, reason = validate_github_url(args.url)
+    if not valid:
+        print(f"Error: {reason}", file=sys.stderr)
+        return EXIT_USAGE
+
+    try:
+        result = upsert_remote(args.path, args.remote, args.url)
+    except Exception as exc:
+        if args.json:
+            print(json.dumps({"status": "error", "error": str(exc)}, ensure_ascii=False), file=sys.stderr)
+        else:
+            print(f"Error: {exc}", file=sys.stderr)
+        return EXIT_RUNTIME
+
+    if args.json:
+        print(json.dumps(result, ensure_ascii=False))
     else:
-        print(f"⚠️  远程连接测试失败: {stderr}")
-        print("提示: 请检查URL是否正确，以及是否有访问权限")
-    
-    return 0
+        print(f"Remote '{result['remote']}' {result['action']}: {result['new_url']}")
+        if result["connection_test"] == "ok":
+            print("Remote connection test passed.")
+        else:
+            print(f"Remote connection test failed: {result['connection_error']}")
+    return EXIT_OK
+
 
 if __name__ == "__main__":
     sys.exit(main())

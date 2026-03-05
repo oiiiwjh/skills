@@ -64,12 +64,23 @@ description: GitHub仓库提交管理技能，用于检查、验证和提交代�
 
 ## 脚本使用说明
 
+### CLI Contract
+
+- `python github-commit/scripts/check_git_status.py [path] [--history-limit N] [--json]`
+- `python github-commit/scripts/update_remote.py <path> <remote> <url> [--json]`
+- `python github-commit/scripts/create_commit.py <path> <message> [--push] [--remote origin] [--json]`
+
+退出码约定：
+- `0`: 成功
+- `1`: 运行时错误
+- `2`: 参数错误
+
 ### check_git_status.py
 检查Git仓库状态的脚本。
 
 **用法**：
 ```bash
-python scripts/check_git_status.py [目录路径]
+python github-commit/scripts/check_git_status.py [目录路径] [--history-limit 5] [--json]
 ```
 
 **输出**：
@@ -84,12 +95,12 @@ python scripts/check_git_status.py [目录路径]
 
 **用法**：
 ```bash
-python scripts/update_remote.py <目录> <远程名称> <GitHub URL>
+python github-commit/scripts/update_remote.py <目录> <远程名称> <GitHub URL> [--json]
 ```
 
 **示例**：
 ```bash
-python scripts/update_remote.py . origin https://github.com/username/repo.git
+python github-commit/scripts/update_remote.py . origin https://github.com/username/repo.git
 ```
 
 **功能**：
@@ -102,16 +113,16 @@ python scripts/update_remote.py . origin https://github.com/username/repo.git
 
 **用法**：
 ```bash
-python scripts/create_commit.py <目录> <提交消息> [--push]
+python github-commit/scripts/create_commit.py <目录> <提交消息> [--push] [--remote origin] [--json]
 ```
 
 **示例**：
 ```bash
 # 仅创建提交
-python scripts/create_commit.py . "修复登录页面样式问题"
+python github-commit/scripts/create_commit.py . "修复登录页面样式问题"
 
 # 创建提交并推送
-python scripts/create_commit.py . "添加新功能模块" --push
+python github-commit/scripts/create_commit.py . "添加新功能模块" --push
 ```
 
 **功能**：
@@ -293,48 +304,48 @@ python scripts/create_commit.py . "添加新功能模块" --push
 ### 示例1：检查Git状态并提交
 ```bash
 # 检查当前Git状态
-python scripts/check_git_status.py .
+python github-commit/scripts/check_git_status.py .
 
 # 创建提交（如果状态正常）
-python scripts/create_commit.py . "修复bug: 解决登录问题"
+python github-commit/scripts/create_commit.py . "修复bug: 解决登录问题"
 
 # 推送到远程仓库
-python scripts/create_commit.py . "添加新功能" --push
+python github-commit/scripts/create_commit.py . "添加新功能" --push
 ```
 
 ### 示例2：验证和更新远程仓库
 ```bash
 # 验证当前远程仓库配置
-python scripts/check_git_status.py . --verbose
+python github-commit/scripts/check_git_status.py . --json
 
 # 更新远程仓库URL
-python scripts/update_remote.py . https://github.com/new-org/new-repo.git
+python github-commit/scripts/update_remote.py . origin https://github.com/new-org/new-repo.git
 
 # 验证更新后的配置
-python scripts/check_git_status.py .
+python github-commit/scripts/check_git_status.py .
 ```
 
 ### 示例3：批量提交工作流
 ```bash
 # 1. 检查所有更改
-python scripts/check_git_status.py . --detailed
+python github-commit/scripts/check_git_status.py . --history-limit 10
 
 # 2. 生成有意义的提交消息
-python scripts/create_commit.py . "feat: 添加用户认证系统\n\n- 实现JWT令牌验证\n- 添加用户注册/登录API\n- 集成权限管理系统"
+python github-commit/scripts/create_commit.py . "feat: 添加用户认证系统"
 
 # 3. 推送到生产分支
-python scripts/create_commit.py . "发布v1.2.0" --push --branch main
+python github-commit/scripts/create_commit.py . "发布v1.2.0" --push --remote origin
 ```
 
 ### 示例4：与其他技能协同工作
 ```bash
 # 与update-readme技能协同
 python update-readme/scripts/analyze_project.py .
-python scripts/create_commit.py . "docs: 更新项目文档"
+python github-commit/scripts/create_commit.py . "docs: 更新项目文档"
 
 # 与skill-manager协同
 python skill-manager/scripts/scan_and_check.py .
-python scripts/create_commit.py . "chore: 更新技能依赖"
+python github-commit/scripts/create_commit.py . "chore: 更新技能依赖"
 ```
 
 ## User-Learned Best Practices & Constraints

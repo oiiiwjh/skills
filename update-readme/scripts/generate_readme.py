@@ -6,6 +6,7 @@ README.md 生成器
 
 import os
 import json
+import sys
 from pathlib import Path
 from typing import Dict, Any, Optional, List
 from datetime import datetime
@@ -729,19 +730,32 @@ def main():
     parser.add_argument('--project-data', required=True, help='项目分析数据JSON文件')
     parser.add_argument('--output', default='README.md', help='输出文件路径')
     parser.add_argument('--update', action='store_true', help='更新现有README.md')
+    parser.add_argument('--json', action='store_true', help='以JSON输出执行结果')
     
-    args = parser.parse_args()
+    try:
+        args = parser.parse_args()
+    except SystemExit as exc:
+        code = int(str(exc) or 0)
+        return 2 if code != 0 else 0
     
     # 加载项目数据
     try:
         with open(args.project_data, 'r', encoding='utf-8') as f:
             project_data = json.load(f)
     except FileNotFoundError:
-        print(f"❌ 找不到项目数据文件: {args.project_data}")
-        return
+        err = f"找不到项目数据文件: {args.project_data}"
+        if args.json:
+            print(json.dumps({"status": "error", "error": err}, ensure_ascii=False), file=sys.stderr)
+        else:
+            print(f"❌ {err}", file=sys.stderr)
+        return 1
     except json.JSONDecodeError:
-        print(f"❌ 项目数据文件格式错误: {args.project_data}")
-        return
+        err = f"项目数据文件格式错误: {args.project_data}"
+        if args.json:
+            print(json.dumps({"status": "error", "error": err}, ensure_ascii=False), file=sys.stderr)
+        else:
+            print(f"❌ {err}", file=sys.stderr)
+        return 1
     
     # 生成README
     output_dir = Path(args.output).parent
@@ -761,12 +775,25 @@ def main():
         output_path.parent.mkdir(parents=True, exist_ok=True)
         with open(output_path, 'w', encoding='utf-8') as f:
             f.write(final_content)
-        
-        print(f"✅ README.md 已生成: {output_path}")
-        print(f"📏 文件大小: {len(final_content)} 字符")
-        
+
+        result = {
+            "status": "ok",
+            "output": str(output_path),
+            "size": len(final_content),
+            "updated": bool(args.update and output_path.exists()),
+        }
+        if args.json:
+            print(json.dumps(result, ensure_ascii=False))
+        else:
+            print(f"✅ README.md 已生成: {output_path}")
+            print(f"📏 文件大小: {len(final_content)} 字符")
+        return 0
     except Exception as e:
-        print(f"❌ 写入文件失败: {e}")
+        if args.json:
+            print(json.dumps({"status": "error", "error": str(e)}, ensure_ascii=False), file=sys.stderr)
+        else:
+            print(f"❌ 写入文件失败: {e}", file=sys.stderr)
+        return 1
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())
