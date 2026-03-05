@@ -6,6 +6,8 @@
 
 本仓库包含用于 OpenCode 代理的技能。技能是针对特定领域或任务的"入职指南"——它们将 Claude 从一个通用代理转变为具备程序化知识的专业化代理，这些知识是任何模型都无法完全掌握的。
 
+技能目录策略：真实技能统一维护在 `~/.agents/skills`，其他工具目录通过软链接使用这些技能。
+
 ## 可用技能
 
 ### 📄 **paper-detailed-analysis** (论文深度分析)
@@ -51,7 +53,23 @@
 - 创建新的OpenCode技能
 - 修改现有技能
 - 理解技能开发模式
-- 打包技能以供分发
+- 生成 OpenAI 技能元数据
+
+### 📚 **latex-lite-template-builder** (LaTeX 轻量模板构建器)
+**描述**: 从已有 LaTeX 模板目录构建可复用的轻量论文模板，支持脚本化生成与可选 Overleaf 打包输出。
+
+**使用场景**:
+- 将已有论文样式迁移为可复用模板
+- 生成精简的论文骨架项目
+- 输出便于 Overleaf 使用的模板包
+
+### 📥 **skill-installer** (技能安装器)
+**描述**: 将 Codex 技能安装到 `$CODEX_HOME/skills`，支持从预置列表或 GitHub 仓库路径安装。
+
+**使用场景**:
+- 查看可安装的预置技能
+- 快速安装预置技能
+- 从 GitHub 仓库路径安装技能
 
 ### 📝 **update-readme** (README更新器)
 **描述**: 根据当前目录内容、git提交记录和现有文档，自动更新README.md和AGENTS.md文件。当需要维护项目文档、同步最新项目状态、或基于代码库变化更新文档时使用此技能。
@@ -139,8 +157,8 @@ python skill-creator/scripts/init_skill.py my-new-skill --path .
 # 验证技能
 python skill-creator/scripts/quick_validate.py my-new-skill
 
-# 打包技能以供分发
-python skill-creator/scripts/package_skill.py my-new-skill
+# 生成 OpenAI 技能元数据
+python skill-creator/scripts/generate_openai_yaml.py my-new-skill
 ```
 
 ### 对于技能使用
@@ -163,6 +181,12 @@ python skill-manager/scripts/scan_and_check.py .
 
 # 将GitHub仓库转换为技能
 python github-to-skills/scripts/fetch_github_info.py https://github.com/username/repo.git
+
+# 列出可安装的预置技能
+python skill-installer/scripts/list-skills.py
+
+# 从 GitHub 安装技能
+python skill-installer/scripts/install-skill-from-github.py https://github.com/owner/repo.git
 
 # 基于反馈进化技能
 python skill-evolution-manager/scripts/merge_evolution.py skill-name '{"preferences": ["用户偏好"], "fixes": ["已知修复"], "custom_prompts": "自定义指令"}'
@@ -222,77 +246,20 @@ description: 何时使用此技能的清晰描述
 ├── README_cn.md                 # 中文README文件
 ├── README_en.md                 # 英文README文件
 ├── AGENTS.md                    # 代理指南
-├── skill-creator/              # 技能创建框架
-│   ├── SKILL.md
-│   ├── scripts/
-│   │   ├── init_skill.py
-│   │   ├── quick_validate.py
-│   │   └── package_skill.py
-│   └── references/
-│       ├── workflows.md
-│       └── output-patterns.md
-├── github-commit/              # GitHub提交管理
-│   ├── SKILL.md
-│   ├── scripts/
-│   │   ├── check_git_status.py
-│   │   ├── create_commit.py
-│   │   └── update_remote.py
-│   └── references/
-│       ├── git_workflow.md
-│       └── commit_conventions.md
-├── update-readme/              # README/AGENTS.md更新器
-│   ├── SKILL.md
-│   ├── scripts/
-│   │   ├── analyze_project.py
-│   │   ├── generate_readme.py
-│   │   ├── update_agents.py
-│   │   └── utils.py
-│   └── references/
-│       ├── README_templates.md
-│       ├── AGENTS_template.md
-│       └── best_practices.md
-├── paper-detailed-analysis/    # 学术论文分析
-│   └── SKILL.md
-├── paper-depth-reading/        # 深度论文阅读
-│   └── SKILL.md
-├── humanizer/                  # AI文本人性化
-│   ├── SKILL.md
-│   ├── package.json
-│   ├── humanizer-implementation.js
-│   ├── test.js
-│   └── README.md
-├── humanizer-zh/               # 中文文本人性化
-│   └── SKILL.md
-├── pdf/                        # PDF处理工具包
-│   ├── SKILL.md
-│   ├── scripts/
-│   │   ├── extract_form_field_info.py
-│   │   ├── fill_pdf_form_with_annotations.py
-│   │   └── convert_pdf_to_images.py
-│   └── references/
-│       └── forms.md
-├── github-to-skills/           # GitHub到技能转换器
-│   ├── SKILL.md
-│   ├── scripts/
-│   │   ├── fetch_github_info.py
-│   │   └── create_github_skill.py
-├── skill-manager/              # 技能管理器
-│   ├── SKILL.md
-│   ├── scripts/
-│   │   ├── scan_and_check.py
-│   │   ├── list_skills.py
-│   │   ├── delete_skill.py
-│   │   └── update_helper.py
-├── skill-evolution-manager/    # 技能进化管理器
-│   ├── SKILL.md
-│   ├── scripts/
-│   │   ├── merge_evolution.py
-│   │   ├── smart_stitch.py
-│   │   └── align_all.py
-└── baoyu-url-to-markdown/      # URL转Markdown转换器
-    ├── SKILL.md
-    ├── scripts/
-    │   └── fetch_url_to_markdown.py
+├── baoyu-url-to-markdown/       # URL 转 Markdown
+├── github-commit/               # GitHub 提交管理
+├── github-to-skills/            # GitHub 转技能
+├── humanizer/                   # 英文文本人性化
+├── humanizer-zh/                # 中文文本人性化
+├── latex-lite-template-builder/ # LaTeX 轻量模板构建
+├── paper-depth-reading/         # 论文深度阅读
+├── paper-detailed-analysis/     # 论文深度分析
+├── pdf/                         # PDF 处理工具包
+├── skill-creator/               # 技能创建框架
+├── skill-evolution-manager/     # 技能进化管理
+├── skill-installer/             # 技能安装器
+├── skill-manager/               # 技能生命周期管理
+└── update-readme/               # README/AGENTS 更新器
 ```
 
 ## 贡献
@@ -302,7 +269,7 @@ description: 何时使用此技能的清晰描述
 2. **规划** 可重用内容（脚本、参考资料、资源）
 3. **初始化** 技能使用 `init_skill.py`
 4. **编辑** 技能 - 实现资源和编写SKILL.md
-5. **打包** 技能使用 `package_skill.py`
+5. **生成元数据** 使用 `generate_openai_yaml.py`
 6. **迭代** 基于实际使用情况
 
 ### 代码风格指南
@@ -322,6 +289,8 @@ description: 何时使用此技能的清晰描述
 - [skill-manager/SKILL.md](./skill-manager/SKILL.md) - 技能生命周期管理指南
 - [skill-evolution-manager/SKILL.md](./skill-evolution-manager/SKILL.md) - 技能进化管理指南
 - [github-to-skills/SKILL.md](./github-to-skills/SKILL.md) - GitHub到技能转换指南
+- [latex-lite-template-builder/SKILL.md](./latex-lite-template-builder/SKILL.md) - LaTeX 轻量模板构建指南
+- [skill-installer/SKILL.md](./skill-installer/SKILL.md) - 技能安装器指南
 - [.vscode/settings.json](./.vscode/settings.json) - 开发环境设置
 
 ## 许可证

@@ -6,6 +6,8 @@ A collection of modular, self-contained skills that extend Claude's capabilities
 
 This repository contains skills for OpenCode agents. Skills are "onboarding guides" for specific domains or tasks—they transform Claude from a general-purpose agent into a specialized agent equipped with procedural knowledge that no model can fully possess.
 
+Canonical source path policy: keep real skills in `~/.agents/skills`, and let other tool-specific directories use symlinks.
+
 ## Available Skills
 
 ### 📄 **paper-detailed-analysis**
@@ -51,7 +53,23 @@ This repository contains skills for OpenCode agents. Skills are "onboarding guid
 - Creating new OpenCode skills
 - Modifying existing skills
 - Understanding skill development patterns
-- Packaging skills for distribution
+- Generating OpenAI skill metadata
+
+### 📚 **latex-lite-template-builder**
+**Description**: Build reusable lite LaTeX paper templates from a source template directory. Supports script-based generation and optional Overleaf bundle output.
+
+**Use when**:
+- Migrating an existing LaTeX paper style into a reusable template
+- Creating compact paper skeletons for repeated use
+- Preparing Overleaf-friendly template bundles
+
+### 📥 **skill-installer**
+**Description**: Install Codex skills into `$CODEX_HOME/skills` from a curated list or a GitHub repo path.
+
+**Use when**:
+- Listing installable curated skills
+- Installing a curated skill quickly
+- Installing a skill directly from a GitHub repository path
 
 ### 📝 **update-readme**
 **Description**: Automatically updates README.md and AGENTS.md files based on current directory contents, git commit history, and existing documentation. Use this skill when maintaining project documentation, synchronizing the latest project status, or updating documentation based on codebase changes.
@@ -139,8 +157,8 @@ python skill-creator/scripts/init_skill.py my-new-skill --path .
 # Validate a skill
 python skill-creator/scripts/quick_validate.py my-new-skill
 
-# Package a skill for distribution
-python skill-creator/scripts/package_skill.py my-new-skill
+# Generate OpenAI skill metadata
+python skill-creator/scripts/generate_openai_yaml.py my-new-skill
 ```
 
 ### For Skill Usage
@@ -163,6 +181,12 @@ python skill-manager/scripts/scan_and_check.py .
 
 # Convert GitHub repo to skill
 python github-to-skills/scripts/fetch_github_info.py https://github.com/username/repo.git
+
+# List installable curated skills
+python skill-installer/scripts/list-skills.py
+
+# Install skill from GitHub
+python skill-installer/scripts/install-skill-from-github.py https://github.com/owner/repo.git
 
 # Evolve skills based on feedback
 python skill-evolution-manager/scripts/merge_evolution.py skill-name '{"preferences": ["user preferences"], "fixes": ["known fixes"], "custom_prompts": "custom instructions"}'
@@ -222,77 +246,20 @@ The three new skills form a complete skill lifecycle management system:
 ├── README_cn.md                 # Chinese README file
 ├── README_en.md                 # English README file
 ├── AGENTS.md                    # Agent guidelines
-├── skill-creator/              # Skill creation framework
-│   ├── SKILL.md
-│   ├── scripts/
-│   │   ├── init_skill.py
-│   │   ├── quick_validate.py
-│   │   └── package_skill.py
-│   └── references/
-│       ├── workflows.md
-│       └── output-patterns.md
-├── github-commit/              # GitHub commit management
-│   ├── SKILL.md
-│   ├── scripts/
-│   │   ├── check_git_status.py
-│   │   ├── create_commit.py
-│   │   └── update_remote.py
-│   └── references/
-│       ├── git_workflow.md
-│       └── commit_conventions.md
-├── update-readme/              # README/AGENTS.md updater
-│   ├── SKILL.md
-│   ├── scripts/
-│   │   ├── analyze_project.py
-│   │   ├── generate_readme.py
-│   │   ├── update_agents.py
-│   │   └── utils.py
-│   └── references/
-│       ├── README_templates.md
-│       ├── AGENTS_template.md
-│       └── best_practices.md
-├── paper-detailed-analysis/    # Academic paper analysis
-│   └── SKILL.md
-├── paper-depth-reading/        # Deep paper reading
-│   └── SKILL.md
-├── humanizer/                  # AI text humanization
-│   ├── SKILL.md
-│   ├── package.json
-│   ├── humanizer-implementation.js
-│   ├── test.js
-│   └── README.md
-├── humanizer-zh/               # Chinese text humanization
-│   └── SKILL.md
-├── pdf/                        # PDF processing toolkit
-│   ├── SKILL.md
-│   ├── scripts/
-│   │   ├── extract_form_field_info.py
-│   │   ├── fill_pdf_form_with_annotations.py
-│   │   └── convert_pdf_to_images.py
-│   └── references/
-│       └── forms.md
-├── github-to-skills/           # GitHub to skills converter
-│   ├── SKILL.md
-│   ├── scripts/
-│   │   ├── fetch_github_info.py
-│   │   └── create_github_skill.py
-├── skill-manager/              # Skill manager
-│   ├── SKILL.md
-│   ├── scripts/
-│   │   ├── scan_and_check.py
-│   │   ├── list_skills.py
-│   │   ├── delete_skill.py
-│   │   └── update_helper.py
-├── skill-evolution-manager/    # Skill evolution manager
-│   ├── SKILL.md
-│   ├── scripts/
-│   │   ├── merge_evolution.py
-│   │   ├── smart_stitch.py
-│   │   └── align_all.py
-└── baoyu-url-to-markdown/      # URL to markdown converter
-    ├── SKILL.md
-    ├── scripts/
-    │   └── fetch_url_to_markdown.py
+├── baoyu-url-to-markdown/       # URL to markdown converter
+├── github-commit/               # GitHub commit management
+├── github-to-skills/            # GitHub to skills converter
+├── humanizer/                   # AI text humanization
+├── humanizer-zh/                # Chinese text humanization
+├── latex-lite-template-builder/ # LaTeX lite template builder
+├── paper-depth-reading/         # Deep paper reading
+├── paper-detailed-analysis/     # Academic paper analysis
+├── pdf/                         # PDF processing toolkit
+├── skill-creator/               # Skill creation framework
+├── skill-evolution-manager/     # Skill evolution manager
+├── skill-installer/             # Skill installer
+├── skill-manager/               # Skill lifecycle manager
+└── update-readme/               # README/AGENTS updater
 ```
 
 ## Contributing
@@ -302,7 +269,7 @@ The three new skills form a complete skill lifecycle management system:
 2. **Plan** reusable contents (scripts, references, assets)
 3. **Initialize** skill with `init_skill.py`
 4. **Edit** the skill - implement resources and write SKILL.md
-5. **Package** skill with `package_skill.py`
+5. **Generate metadata** with `generate_openai_yaml.py`
 6. **Iterate** based on real usage
 
 ### Code Style Guidelines
@@ -322,6 +289,8 @@ The three new skills form a complete skill lifecycle management system:
 - [skill-manager/SKILL.md](./skill-manager/SKILL.md) - Skill lifecycle management guide
 - [skill-evolution-manager/SKILL.md](./skill-evolution-manager/SKILL.md) - Skill evolution management guide
 - [github-to-skills/SKILL.md](./github-to-skills/SKILL.md) - GitHub to skills conversion guide
+- [latex-lite-template-builder/SKILL.md](./latex-lite-template-builder/SKILL.md) - LaTeX lite template builder guide
+- [skill-installer/SKILL.md](./skill-installer/SKILL.md) - Skill installer guide
 - [.vscode/settings.json](./.vscode/settings.json) - Development environment settings
 
 ## License

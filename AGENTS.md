@@ -6,6 +6,28 @@ Comprehensive guidelines for agentic coding agents working with the OpenCode Ski
 
 This document provides guidelines, conventions, and best practices for agents working with skills in this repository. Skills are modular packages that extend Claude's capabilities with specialized knowledge, workflows, and tool integrations.
 
+## Available Skills
+
+Canonical source directory for real skills: `~/.agents/skills`
+
+Current skill set (14):
+- `baoyu-url-to-markdown`
+- `github-commit`
+- `github-to-skills`
+- `humanizer`
+- `humanizer-zh`
+- `latex-lite-template-builder`
+- `paper-depth-reading`
+- `paper-detailed-analysis`
+- `pdf`
+- `skill-creator`
+- `skill-evolution-manager`
+- `skill-installer`
+- `skill-manager`
+- `update-readme`
+
+Other tool-specific skill directories should consume these skills through symlinks.
+
 ## Skill Development Guidelines
 
 ### Skill Structure
@@ -208,8 +230,8 @@ python skill-creator/scripts/init_skill.py my-new-skill --path .
 # Validate skill structure
 python skill-creator/scripts/quick_validate.py my-new-skill
 
-# Package skill for distribution
-python skill-creator/scripts/package_skill.py my-new-skill
+# Generate OpenAI skill metadata
+python skill-creator/scripts/generate_openai_yaml.py my-new-skill
 
 # List all installed skills
 python skill-manager/scripts/list_skills.py .
@@ -219,6 +241,9 @@ python skill-manager/scripts/scan_and_check.py .
 
 # Convert GitHub repo to skill
 python github-to-skills/scripts/fetch_github_info.py https://github.com/username/repo.git
+
+# List installable curated skills
+python skill-installer/scripts/list-skills.py
 
 # Evolve skills based on feedback
 python skill-evolution-manager/scripts/merge_evolution.py skill-name '{"preferences": ["user preferences"], "fixes": ["known fixes"], "custom_prompts": "custom instructions"}'

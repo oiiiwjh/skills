@@ -34,9 +34,11 @@ These form a complete skill lifecycle management system:
 | 📝 **update-readme** | Documentation | Automatically updates README/AGENTS files |
 | 🔧 **github-commit** | Version Control | GitHub repository commit management |
 | 📊 **pdf** | Document Processing | Comprehensive PDF manipulation toolkit |
+| 📚 **latex-lite-template-builder** | Document Processing | Build reusable lite LaTeX paper templates |
 | 🔄 **github-to-skills** | Skill Management | Converts GitHub repos to AI skills |
 | 📋 **skill-manager** | Skill Management | Lifecycle manager for GitHub-based skills |
 | 🚀 **skill-evolution-manager** | Skill Management | Evolves skills based on user feedback |
+| 📥 **skill-installer** | Skill Management | Install Codex skills from curated list or GitHub repos |
 | 🌐 **baoyu-url-to-markdown** | Web & Content | Fetch URLs and convert to markdown using Chrome CDP |
 
 ## 🏗️ Project Structure
@@ -60,6 +62,8 @@ These form a complete skill lifecycle management system:
 ├── github-to-skills/           # GitHub to skills converter
 ├── skill-manager/              # Skill lifecycle manager
 ├── skill-evolution-manager/    # Skill evolution manager
+├── skill-installer/            # Skill installer
+├── latex-lite-template-builder/# LaTeX lite template builder
 └── baoyu-url-to-markdown/      # URL to markdown converter
 ```
 
@@ -73,8 +77,8 @@ python skill-creator/scripts/init_skill.py my-new-skill --path .
 # Validate a skill
 python skill-creator/scripts/quick_validate.py my-new-skill
 
-# Package a skill for distribution
-python skill-creator/scripts/package_skill.py my-new-skill
+# Generate OpenAI skill metadata
+python skill-creator/scripts/generate_openai_yaml.py my-new-skill
 ```
 
 ### For Skill Management
@@ -88,10 +92,21 @@ python skill-manager/scripts/list_skills.py .
 # Convert a GitHub repo to a skill
 python github-to-skills/scripts/fetch_github_info.py <github_url>
 
+# List installable curated skills
+python skill-installer/scripts/list-skills.py
+
+# Install skill from GitHub
+python skill-installer/scripts/install-skill-from-github.py https://github.com/owner/repo.git
+
 # Evolve skills based on user feedback
 python skill-evolution-manager/scripts/merge_evolution.py <skill_name> '{"preferences": ["user preferences"], "fixes": ["known fixes"], "custom_prompts": "custom instructions"}'
 python skill-evolution-manager/scripts/smart_stitch.py <skill_name>
 ```
+
+## 🧭 Skill Directory Policy
+
+- Canonical source directory for real skills: `~/.agents/skills`
+- Other tool-specific skill directories should consume these skills via symlinks.
 
 ## 📖 Detailed Documentation
 
