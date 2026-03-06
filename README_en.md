@@ -71,6 +71,14 @@ Canonical source path policy: keep real skills in `~/.agents/skills`, and let ot
 - Installing a curated skill quickly
 - Installing a skill directly from a GitHub repository path
 
+### 🎞️ **frontend-slides**
+**Description**: Wrapper skill for installing and updating the upstream `frontend-slides` presentation skill from GitHub.
+
+**Use when**:
+- Adding high-quality HTML slide generation capability to local agents
+- Updating local copies of `frontend-slides` from upstream
+- Managing a tracked wrapper with pinned hash/version metadata
+
 ### 📝 **update-readme**
 **Description**: Automatically updates README.md and AGENTS.md files based on current directory contents, git commit history, and existing documentation. Use this skill when maintaining project documentation, synchronizing the latest project status, or updating documentation based on codebase changes.
 
@@ -268,6 +276,7 @@ The three new skills form a complete skill lifecycle management system:
 ├── skill-creator/               # Skill creation framework
 ├── skill-evolution-manager/     # Skill evolution manager
 ├── skill-installer/             # Skill installer
+├── frontend-slides/             # Frontend slides wrapper skill
 ├── skill-manager/               # Skill lifecycle manager
 └── update-readme/               # README/AGENTS updater
 ```
@@ -301,6 +310,7 @@ The three new skills form a complete skill lifecycle management system:
 - [github-to-skills/SKILL.md](./github-to-skills/SKILL.md) - GitHub to skills conversion guide
 - [latex-lite-template-builder/SKILL.md](./latex-lite-template-builder/SKILL.md) - LaTeX lite template builder guide
 - [skill-installer/SKILL.md](./skill-installer/SKILL.md) - Skill installer guide
+- [frontend-slides/SKILL.md](./frontend-slides/SKILL.md) - Frontend slides wrapper skill guide
 - [.vscode/settings.json](./.vscode/settings.json) - Development environment settings
 
 ## License
