@@ -4,3 +4,4 @@ __pycache__/
 
 # macOS metadata
 .DS_Store
+.vscode/
