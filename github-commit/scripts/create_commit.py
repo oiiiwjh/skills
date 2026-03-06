@@ -1,163 +1,155 @@
 #!/usr/bin/env python3
-"""
-创建Git提交的脚本
-"""
+"""Stage changes, create a commit, and optionally push."""
 
+from __future__ import annotations
+
+import argparse
+import json
+import os
 import subprocess
 import sys
-import os
-import re
+from typing import Any
 
-def run_git_command(command, cwd=None):
-    """运行git命令并返回输出"""
+EXIT_OK = 0
+EXIT_RUNTIME = 1
+EXIT_USAGE = 2
+
+
+def run_git_command(args: list[str], cwd: str) -> tuple[int, str, str]:
     try:
         result = subprocess.run(
-            command,
-            shell=True,
+            ["git", *args],
+            cwd=cwd,
             capture_output=True,
             text=True,
-            cwd=cwd,
-            env={**os.environ, 'GIT_TERMINAL_PROMPT': '0'}
+            env={**os.environ, "GIT_TERMINAL_PROMPT": "0"},
         )
         return result.returncode, result.stdout.strip(), result.stderr.strip()
-    except Exception as e:
-        return 1, "", str(e)
+    except Exception as exc:
+        return EXIT_RUNTIME, "", str(exc)
 
-def validate_commit_message(message):
-    """验证提交消息格式"""
-    if not message or not message.strip():
-        return False, "提交消息不能为空"
-    
-    if len(message.strip()) < 10:
-        return False, "提交消息太短，请提供更详细的描述"
-    
-    if len(message.strip()) > 200:
-        return False, "提交消息太长，请精简到200字符以内"
-    
+
+def validate_commit_message(message: str) -> tuple[bool, str]:
+    text = message.strip()
+    if not text:
+        return False, "commit message is required"
+    if len(text) < 10:
+        return False, "commit message must be at least 10 characters"
+    if len(text) > 200:
+        return False, "commit message must be <= 200 characters"
     return True, ""
 
-def generate_commit_message(changes):
-    """根据更改生成提交消息"""
-    if not changes:
-        return "更新代码"
-    
-    change_types = {}
-    for change in changes:
-        status = change['status'][0] if change['status'] else '?'
-        if status in change_types:
-            change_types[status] += 1
-        else:
-            change_types[status] = 1
-    
-    # 分析更改类型
-    actions = []
-    if 'M' in change_types:
-        actions.append(f"修改{change_types['M']}个文件")
-    if 'A' in change_types:
-        actions.append(f"新增{change_types['A']}个文件")
-    if 'D' in change_types:
-        actions.append(f"删除{change_types['D']}个文件")
-    if 'R' in change_types:
-        actions.append(f"重命名{change_types['R']}个文件")
-    
-    if actions:
-        return f"{'、'.join(actions)}"
-    else:
-        return "代码更新"
 
-def get_changes_summary(cwd=None):
-    """获取更改摘要"""
-    return_code, stdout, stderr = run_git_command("git status --porcelain", cwd)
-    if return_code != 0:
-        return []
-    
-    changes = []
-    for line in stdout.split('\n'):
+def get_changes(cwd: str) -> list[dict[str, str]]:
+    code, stdout, stderr = run_git_command(["status", "--porcelain"], cwd)
+    if code != 0:
+        raise RuntimeError(stderr or "failed to get status")
+    out: list[dict[str, str]] = []
+    for line in stdout.splitlines():
         if line:
-            status = line[:2].strip()
-            file_path = line[3:]
-            changes.append({
-                'status': status,
-                'file': file_path
-            })
-    return changes
+            out.append({"status": line[:2].strip(), "file": line[3:]})
+    return out
 
-def add_all_changes(cwd=None):
-    """添加所有更改到暂存区"""
-    return run_git_command("git add .", cwd)
 
-def create_commit(message, cwd=None):
-    """创建提交"""
-    return run_git_command(f'git commit -m "{message}"', cwd)
+def ensure_repo(cwd: str) -> None:
+    code, _, stderr = run_git_command(["rev-parse", "--is-inside-work-tree"], cwd)
+    if code != 0:
+        raise RuntimeError(stderr or "not a git repository")
 
-def push_to_remote(remote="origin", branch=None, cwd=None):
-    """推送到远程仓库"""
-    if not branch:
-        return_code, stdout, stderr = run_git_command("git branch --show-current", cwd)
-        if return_code == 0:
-            branch = stdout.strip()
-        else:
-            return return_code, stdout, stderr
-    
-    if branch:
-        return run_git_command(f"git push {remote} {branch}", cwd)
-    else:
-        return 1, "", "无法确定当前分支"
 
-def main():
-    """主函数"""
-    if len(sys.argv) < 3:
-        print("用法: python create_commit.py <目录> <提交消息> [--push]")
-        return 1
-    
-    cwd = sys.argv[1]
-    commit_message = sys.argv[2]
-    should_push = len(sys.argv) > 3 and sys.argv[3] == "--push"
-    
-    if not os.path.exists(cwd):
-        print(f"❌ 目录不存在: {cwd}")
-        return 1
-    
-    # 验证提交消息
-    is_valid, error_msg = validate_commit_message(commit_message)
-    if not is_valid:
-        print(f"❌ 提交消息无效: {error_msg}")
-        return 1
-    
-    # 获取更改
-    changes = get_changes_summary(cwd)
+def current_branch(cwd: str) -> str:
+    code, stdout, stderr = run_git_command(["branch", "--show-current"], cwd)
+    if code != 0 or not stdout:
+        raise RuntimeError(stderr or "failed to resolve current branch")
+    return stdout
+
+
+def create_commit(cwd: str, message: str, push: bool, remote: str) -> dict[str, Any]:
+    ensure_repo(cwd)
+    changes = get_changes(cwd)
     if not changes:
-        print("⚠️  没有检测到更改，跳过提交")
-        return 0
-    
-    print(f"📝 检测到 {len(changes)} 个更改")
-    
-    # 添加所有更改
-    print("📦 添加更改到暂存区...")
-    return_code, stdout, stderr = add_all_changes(cwd)
-    if return_code != 0:
-        print(f"❌ 添加更改失败: {stderr}")
-        return return_code
-    
-    # 创建提交
-    print(f"💾 创建提交: {commit_message}")
-    return_code, stdout, stderr = create_commit(commit_message, cwd)
-    if return_code != 0:
-        print(f"❌ 创建提交失败: {stderr}")
-        return return_code
-    
-    print(f"✅ 提交成功: {stdout}")
-    
-    # 如果需要推送
-    if should_push:
-        print("🚀 推送到远程仓库...")
-        return_code, stdout, stderr = push_to_remote(cwd=cwd)
-        if return_code != 0:
-            print(f"❌ 推送失败: {stderr}")
-            return return_code
-        print(f"✅ 推送成功: {stdout}")
-    
-    return 0
+        return {"status": "noop", "message": "no changes to commit", "cwd": os.path.abspath(cwd)}
+
+    code, _, stderr = run_git_command(["add", "-A"], cwd)
+    if code != 0:
+        raise RuntimeError(stderr or "failed to stage changes")
+
+    code, stdout, stderr = run_git_command(["commit", "-m", message], cwd)
+    if code != 0:
+        raise RuntimeError(stderr or "failed to create commit")
+
+    branch = current_branch(cwd)
+    push_result = "skipped"
+    push_error = ""
+    if push:
+        p_code, p_out, p_err = run_git_command(["push", remote, branch], cwd)
+        if p_code != 0:
+            push_result = "failed"
+            push_error = p_err or p_out
+        else:
+            push_result = "ok"
+
+    return {
+        "status": "ok",
+        "cwd": os.path.abspath(cwd),
+        "branch": branch,
+        "changes_count": len(changes),
+        "commit_output": stdout,
+        "push": push_result,
+        "push_error": push_error,
+    }
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Create a commit from current changes")
+    parser.add_argument("path", help="Repository path")
+    parser.add_argument("message", help="Commit message")
+    parser.add_argument("--push", action="store_true", help="Push after commit")
+    parser.add_argument("--remote", default="origin", help="Remote name when --push is used")
+    parser.add_argument("--json", action="store_true", help="Emit machine-readable JSON output")
+    return parser
+
+
+def main() -> int:
+    parser = build_parser()
+    try:
+        args = parser.parse_args()
+    except SystemExit as exc:
+        code = int(str(exc) or 0)
+        return EXIT_USAGE if code != 0 else EXIT_OK
+
+    if not os.path.isdir(args.path):
+        print(f"Error: directory not found: {args.path}", file=sys.stderr)
+        return EXIT_RUNTIME
+
+    valid, reason = validate_commit_message(args.message)
+    if not valid:
+        print(f"Error: {reason}", file=sys.stderr)
+        return EXIT_USAGE
+
+    try:
+        result = create_commit(args.path, args.message, args.push, args.remote)
+    except Exception as exc:
+        if args.json:
+            print(json.dumps({"status": "error", "error": str(exc)}, ensure_ascii=False), file=sys.stderr)
+        else:
+            print(f"Error: {exc}", file=sys.stderr)
+        return EXIT_RUNTIME
+
+    if args.json:
+        print(json.dumps(result, ensure_ascii=False))
+    else:
+        if result["status"] == "noop":
+            print("No changes detected, skipping commit.")
+        else:
+            print(f"Commit created on branch {result['branch']}.")
+            if args.push:
+                if result["push"] == "ok":
+                    print("Push succeeded.")
+                elif result["push"] == "failed":
+                    print(f"Push failed: {result['push_error']}")
+    return EXIT_OK
+
 
 if __name__ == "__main__":
     sys.exit(main())

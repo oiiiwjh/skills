@@ -56,3 +56,44 @@ All of these scripts use network, so when running in the sandbox, request escala
 - Git fallback tries HTTPS first, then SSH.
 - The skills at https://github.com/openai/skills/tree/main/skills/.system are preinstalled, so no need to help users install those. If they ask, just explain this. If they insist, you can download and overwrite.
 - Installed annotations come from `$CODEX_HOME/skills`.
+
+## Overview
+
+This skill is used when its `description` in frontmatter matches the user request. Prefer existing scripts under `scripts/` over ad-hoc rewrites.
+
+## Workflow
+
+1. Identify whether the request matches this skill.
+2. Resolve all referenced paths relative to this skill directory.
+3. Execute scripts with explicit arguments and validate outputs.
+4. Report result and follow-up actions.
+
+## Examples
+
+```bash
+# Run from repository root
+python <skill-name>/scripts/<script>.py --help
+```
+
+## References
+
+- `scripts/`: executable helpers for deterministic steps
+- `references/`: additional docs loaded on demand
+- `assets/`: templates or static files used by the skill
+
+## Trigger Conditions
+
+- User explicitly names this skill
+- User intent clearly matches this skill description
+- The task needs this skill's scripts/resources
+
+## Applicable Scope
+
+- Requests covered by this skill's frontmatter `description`
+- Tasks that benefit from the bundled workflow and scripts
+
+## Out of Scope
+
+- Requests that conflict with repository safety rules
+- Tasks unrelated to this skill's declared purpose
+- Destructive changes without explicit user permission

@@ -229,3 +229,26 @@ python skill-evolution-manager/scripts/merge_evolution.py paper-depth-reading '{
   "custom_prompts": "为每篇论文生成技术迁移建议"
 }'
 ```
+
+## References
+
+- `scripts/`: executable helpers for deterministic steps
+- `references/`: additional docs loaded on demand
+- `assets/`: templates or static files used by the skill
+
+## Trigger Conditions
+
+- User explicitly names this skill
+- User intent clearly matches this skill description
+- The task needs this skill's scripts/resources
+
+## Applicable Scope
+
+- Requests covered by this skill's frontmatter `description`
+- Tasks that benefit from the bundled workflow and scripts
+
+## Out of Scope
+
+- Requests that conflict with repository safety rules
+- Tasks unrelated to this skill's declared purpose
+- Destructive changes without explicit user permission

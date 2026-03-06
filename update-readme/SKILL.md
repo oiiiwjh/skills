@@ -91,6 +91,19 @@ read: README.md
 read: AGENTS.md
 ```
 
+## CLI Contract
+
+`update-readme/scripts` 下核心脚本已统一支持标准 CLI：
+
+- `python update-readme/scripts/analyze_project.py <path> [--json] [--output <file>]`
+- `python update-readme/scripts/generate_readme.py --project-data <analysis.json> [--output README.md] [--update] [--json]`
+- `python update-readme/scripts/update_agents.py [--project-data <analysis.json>] [--output AGENTS.md] [--update] [--json]`
+
+退出码约定：
+- `0`: 成功
+- `1`: 运行时错误
+- `2`: 参数错误
+
 ## 最佳实践
 
 ### 文档更新时机
@@ -157,7 +170,6 @@ read: AGENTS.md
 - `assets/example_asset.txt`：示例资产
 
 > **完整资源列表**：查看各目录内容
-
 
 ## User-Learned Best Practices & Constraints
 

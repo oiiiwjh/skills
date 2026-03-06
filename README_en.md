@@ -193,6 +193,16 @@ python skill-evolution-manager/scripts/merge_evolution.py skill-name '{"preferen
 python skill-evolution-manager/scripts/smart_stitch.py skill-name
 ```
 
+## Breaking CLI Changes (2026-03)
+
+| Script | Old behavior | New behavior |
+|---|---|---|
+| `skill-evolution-manager/scripts/align_all.py` | defaulted to `~/.claude/skills` | infers repository root by default, or accepts explicit `[skills_root]` |
+| `github-commit/scripts/update_remote.py` | interactive confirmation | non-interactive remote upsert, supports `--json` |
+| `github-commit/scripts/check_git_status.py` | text output only | supports `--history-limit` and `--json` |
+| `github-commit/scripts/create_commit.py` | basic `--push` flow | supports `--push --remote <name> --json` |
+| `update-readme/scripts/*` | inconsistent exits | unified exits: `0` success, `1` runtime, `2` usage |
+
 ## Skill Structure
 
 Each skill follows this structure:

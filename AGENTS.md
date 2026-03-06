@@ -262,6 +262,29 @@ git status
 git log --oneline -10
 ```
 
+### Refactored CLI Contracts (2026-03)
+```bash
+# skill-evolution-manager
+python skill-evolution-manager/scripts/merge_evolution.py <skill_path> <json_string> [--json]
+python skill-evolution-manager/scripts/smart_stitch.py <skill_path> [--json]
+python skill-evolution-manager/scripts/align_all.py [skills_root] [--json]
+
+# github-commit
+python github-commit/scripts/check_git_status.py [path] [--history-limit N] [--json]
+python github-commit/scripts/update_remote.py <path> <remote> <url> [--json]
+python github-commit/scripts/create_commit.py <path> <message> [--push] [--remote origin] [--json]
+
+# update-readme
+python update-readme/scripts/analyze_project.py [path] [--json] [--output <file>]
+python update-readme/scripts/generate_readme.py --project-data <analysis.json> [--output README.md] [--update] [--json]
+python update-readme/scripts/update_agents.py [--project-data <analysis.json>] [--output AGENTS.md] [--update] [--json]
+```
+
+Exit code contract for refactored Python CLIs:
+- `0`: success
+- `1`: runtime error
+- `2`: argument/usage error
+
 ### Code Quality
 ```bash
 # Check Python syntax

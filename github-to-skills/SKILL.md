@@ -141,3 +141,30 @@ grep -E "github_url|github_hash" yt-dlp-skill/SKILL.md
 # 注册到技能管理器
 python skill-manager/scripts/scan_and_check.py .
 ```
+
+## Overview
+
+This skill is used when its `description` in frontmatter matches the user request. Prefer existing scripts under `scripts/` over ad-hoc rewrites.
+
+## References
+
+- `scripts/`: executable helpers for deterministic steps
+- `references/`: additional docs loaded on demand
+- `assets/`: templates or static files used by the skill
+
+## Trigger Conditions
+
+- User explicitly names this skill
+- User intent clearly matches this skill description
+- The task needs this skill's scripts/resources
+
+## Applicable Scope
+
+- Requests covered by this skill's frontmatter `description`
+- Tasks that benefit from the bundled workflow and scripts
+
+## Out of Scope
+
+- Requests that conflict with repository safety rules
+- Tasks unrelated to this skill's declared purpose
+- Destructive changes without explicit user permission

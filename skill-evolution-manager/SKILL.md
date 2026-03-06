@@ -39,11 +39,11 @@ license: MIT
 
 ### 2. 经验持久化 (Persist)
 Agent 调用 `scripts/merge_evolution.py`，将上述 JSON 增量写入目标 Skill 的 `evolution.json` 文件中。
-- **命令**: `python scripts/merge_evolution.py <skill_path> <json_string>`
+- **命令**: `python skill-evolution-manager/scripts/merge_evolution.py <skill_path> <json_string> [--json]`
 
 ### 3. 文档缝合 (Stitch)
 Agent 调用 `scripts/smart_stitch.py`，将 `evolution.json` 的内容转化为 Markdown 并追加到 `SKILL.md` 末尾。
-- **命令**: `python scripts/smart_stitch.py <skill_path>`
+- **命令**: `python skill-evolution-manager/scripts/smart_stitch.py <skill_path> [--json]`
 
 ### 4. 跨版本对齐 (Align)
 当 `skill-manager` 更新了某个 Skill 后，Agent 应主动运行 `smart_stitch.py`，将之前保存的经验"重新缝合"到新版文档中。
@@ -52,7 +52,18 @@ Agent 调用 `scripts/smart_stitch.py`，将 `evolution.json` 的内容转化为
 
 - `scripts/merge_evolution.py`: **增量合并工具**。负责读取旧 JSON，去重合并新 List，保存。
 - `scripts/smart_stitch.py`: **文档生成工具**。负责读取 JSON，在 `SKILL.md` 末尾生成或更新 `## User-Learned Best Practices & Constraints` 章节。
-- `scripts/align_all.py`: **全量对齐工具**。一键遍历所有 Skill 文件夹，将存在的 `evolution.json` 经验重新缝合回对应的 `SKILL.md`。常用于 `skill-manager` 批量更新后的经验还原。
+- `scripts/align_all.py`: **全量对齐工具**。一键遍历技能根目录（默认自动推断为当前仓库根目录）并缝合所有存在 `evolution.json` 的技能。
+
+### CLI Contract
+
+- `python skill-evolution-manager/scripts/merge_evolution.py <skill_path> <json_string> [--json]`
+- `python skill-evolution-manager/scripts/smart_stitch.py <skill_path> [--json]`
+- `python skill-evolution-manager/scripts/align_all.py [skills_root] [--json]`
+
+退出码约定：
+- `0`: 成功
+- `1`: 运行时错误
+- `2`: 参数错误
 
 ## 最佳实践
 
@@ -64,41 +75,41 @@ Agent 调用 `scripts/smart_stitch.py`，将 `evolution.json` 的内容转化为
 ### 示例1：记录单个技能的经验
 ```bash
 # 记录用户对github-commit技能的偏好
-python scripts/merge_evolution.py github-commit '{
+python skill-evolution-manager/scripts/merge_evolution.py github-commit '{
   "preferences": ["提交前总是检查git状态", "使用语义化版本提交消息"],
   "fixes": ["修复子模块处理问题"],
   "custom_prompts": "在提交前运行git status和git diff确认更改"
 }'
 
 # 将经验缝合到技能文档
-python scripts/smart_stitch.py github-commit
+python skill-evolution-manager/scripts/smart_stitch.py github-commit
 ```
 
 ### 示例2：批量处理多个技能
 ```bash
 # 记录paper-detailed-analysis技能的经验
-python scripts/merge_evolution.py paper-detailed-analysis '{
+python skill-evolution-manager/scripts/merge_evolution.py paper-detailed-analysis '{
   "preferences": ["优先分析论文的方法论部分", "提取关键算法伪代码"],
   "fixes": ["修复PDF解析中的编码问题"],
   "custom_prompts": "为每篇论文生成执行摘要和技术要点"
 }'
 
 # 记录humanizer技能的经验
-python scripts/merge_evolution.py humanizer '{
+python skill-evolution-manager/scripts/merge_evolution.py humanizer '{
   "preferences": ["保留专业术语", "调整语气为学术风格"],
   "fixes": ["修复过度人性化导致的语义丢失"],
   "custom_prompts": "针对学术文本使用更保守的人性化策略"
 }'
 
 # 批量缝合所有技能的经验
-python scripts/align_all.py
+python skill-evolution-manager/scripts/align_all.py .
 ```
 
 ### 示例3：技能更新后的经验恢复
 ```bash
 # 当skill-manager更新技能后，恢复进化数据
 python skill-manager/scripts/scan_and_check.py .
-python scripts/align_all.py
+python skill-evolution-manager/scripts/align_all.py .
 
 # 验证经验恢复结果
 grep -r "User-Learned" . --include="SKILL.md"
@@ -108,15 +119,15 @@ grep -r "User-Learned" . --include="SKILL.md"
 ```bash
 # 与skill-manager协同
 python skill-manager/scripts/scan_and_check.py .
-python scripts/align_all.py
+python skill-evolution-manager/scripts/align_all.py .
 
 # 与update-readme协同
 python scripts/align_all.py
 python update-readme/scripts/analyze_project.py .
 
 # 与github-commit协同
-python scripts/merge_evolution.py github-commit '{"preferences": ["自动生成有意义的提交消息"]}'
-python scripts/smart_stitch.py github-commit
+python skill-evolution-manager/scripts/merge_evolution.py github-commit '{"preferences": ["自动生成有意义的提交消息"]}'
+python skill-evolution-manager/scripts/smart_stitch.py github-commit
 python github-commit/scripts/create_commit.py . "feat: 添加技能进化经验"
 ```
 
@@ -131,3 +142,30 @@ find . -name "SKILL.md" -exec grep -l "User-Learned" {} \;
 # 统计进化数据
 find . -name "evolution.json" | wc -l
 ```
+
+## Overview
+
+This skill is used when its `description` in frontmatter matches the user request. Prefer existing scripts under `scripts/` over ad-hoc rewrites.
+
+## References
+
+- `scripts/`: executable helpers for deterministic steps
+- `references/`: additional docs loaded on demand
+- `assets/`: templates or static files used by the skill
+
+## Trigger Conditions
+
+- User explicitly names this skill
+- User intent clearly matches this skill description
+- The task needs this skill's scripts/resources
+
+## Applicable Scope
+
+- Requests covered by this skill's frontmatter `description`
+- Tasks that benefit from the bundled workflow and scripts
+
+## Out of Scope
+
+- Requests that conflict with repository safety rules
+- Tasks unrelated to this skill's declared purpose
+- Destructive changes without explicit user permission

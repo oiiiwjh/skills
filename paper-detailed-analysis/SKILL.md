@@ -200,3 +200,33 @@ description: 深度论文分析技能，专注于从PDF学术论文中提取关�
 
 ### 输出模板
 技能内置标准化的输出模板，确保所有分析报告具有一致的结构和质量标准。模板包括六个主要部分，覆盖从问题定义到方法分析、实验结果和未来方向的完整分析链条。
+
+## Workflow
+
+1. Identify whether the request matches this skill.
+2. Resolve all referenced paths relative to this skill directory.
+3. Execute scripts with explicit arguments and validate outputs.
+4. Report result and follow-up actions.
+
+## References
+
+- `scripts/`: executable helpers for deterministic steps
+- `references/`: additional docs loaded on demand
+- `assets/`: templates or static files used by the skill
+
+## Trigger Conditions
+
+- User explicitly names this skill
+- User intent clearly matches this skill description
+- The task needs this skill's scripts/resources
+
+## Applicable Scope
+
+- Requests covered by this skill's frontmatter `description`
+- Tasks that benefit from the bundled workflow and scripts
+
+## Out of Scope
+
+- Requests that conflict with repository safety rules
+- Tasks unrelated to this skill's declared purpose
+- Destructive changes without explicit user permission
