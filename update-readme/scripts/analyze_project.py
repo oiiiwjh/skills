@@ -17,8 +17,9 @@ import sys
 class ProjectAnalyzer:
     """项目分析器"""
     
-    def __init__(self, root_dir: str = "."):
+    def __init__(self, root_dir: str = ".", verbose: bool = True):
         self.root_dir = Path(root_dir).resolve()
+        self.verbose = verbose
         self.analysis_result = {
             "project_type": "unknown",
             "language": "unknown",
@@ -44,7 +45,8 @@ class ProjectAnalyzer:
     
     def analyze(self) -> Dict[str, Any]:
         """执行完整分析"""
-        print(f"🔍 分析项目: {self.root_dir}")
+        if self.verbose:
+            print(f"🔍 分析项目: {self.root_dir}")
         
         # 检查基本文件
         self._check_basic_files()
@@ -485,7 +487,7 @@ def main():
         return 2 if code != 0 else 0
 
     try:
-        analyzer = ProjectAnalyzer(args.path)
+        analyzer = ProjectAnalyzer(args.path, verbose=not args.json)
         result = analyzer.analyze()
     except Exception as e:
         if args.json:

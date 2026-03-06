@@ -764,6 +764,7 @@ def main():
     
     # 处理输出
     output_path = Path(args.output)
+    existed_before = output_path.exists()
     
     if args.update and output_path.exists():
         final_content = update_existing_readme(output_path, new_content)
@@ -780,7 +781,7 @@ def main():
             "status": "ok",
             "output": str(output_path),
             "size": len(final_content),
-            "updated": bool(args.update and output_path.exists()),
+            "updated": bool(args.update and existed_before),
         }
         if args.json:
             print(json.dumps(result, ensure_ascii=False))
