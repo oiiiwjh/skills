@@ -71,6 +71,14 @@
 - 快速安装预置技能
 - 从 GitHub 仓库路径安装技能
 
+### 🎞️ **frontend-slides** (前端幻灯片包装器)
+**描述**: 用于安装和更新上游 `frontend-slides` 演示文稿技能的包装器，来源于 GitHub 仓库。
+
+**使用场景**:
+- 为本地代理添加高质量 HTML 幻灯片生成能力
+- 从上游更新本地 `frontend-slides` 副本
+- 使用可追踪的 hash/version 元数据管理技能包装器
+
 ### 📝 **update-readme** (README更新器)
 **描述**: 根据当前目录内容、git提交记录和现有文档，自动更新README.md和AGENTS.md文件。当需要维护项目文档、同步最新项目状态、或基于代码库变化更新文档时使用此技能。
 
@@ -268,6 +276,7 @@ description: 何时使用此技能的清晰描述
 ├── skill-creator/               # 技能创建框架
 ├── skill-evolution-manager/     # 技能进化管理
 ├── skill-installer/             # 技能安装器
+├── frontend-slides/             # 前端幻灯片包装器技能
 ├── skill-manager/               # 技能生命周期管理
 └── update-readme/               # README/AGENTS 更新器
 ```
@@ -301,6 +310,7 @@ description: 何时使用此技能的清晰描述
 - [github-to-skills/SKILL.md](./github-to-skills/SKILL.md) - GitHub到技能转换指南
 - [latex-lite-template-builder/SKILL.md](./latex-lite-template-builder/SKILL.md) - LaTeX 轻量模板构建指南
 - [skill-installer/SKILL.md](./skill-installer/SKILL.md) - 技能安装器指南
+- [frontend-slides/SKILL.md](./frontend-slides/SKILL.md) - 前端幻灯片包装器技能指南
 - [.vscode/settings.json](./.vscode/settings.json) - 开发环境设置
 
 ## 许可证

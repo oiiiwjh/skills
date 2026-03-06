@@ -40,6 +40,7 @@ These form a complete skill lifecycle management system:
 | 🚀 **skill-evolution-manager** | Skill Management | Evolves skills based on user feedback |
 | 📥 **skill-installer** | Skill Management | Install Codex skills from curated list or GitHub repos |
 | 🌐 **baoyu-url-to-markdown** | Web & Content | Fetch URLs and convert to markdown using Chrome CDP |
+| 🎞️ **frontend-slides** | Presentation & Design | Wrapper skill to install/update animation-rich HTML slide generation from upstream GitHub repo |
 
 ## 🏗️ Project Structure
 
@@ -63,6 +64,7 @@ These form a complete skill lifecycle management system:
 ├── skill-manager/              # Skill lifecycle manager
 ├── skill-evolution-manager/    # Skill evolution manager
 ├── skill-installer/            # Skill installer
+├── frontend-slides/            # Frontend slides wrapper skill
 ├── latex-lite-template-builder/# LaTeX lite template builder
 └── baoyu-url-to-markdown/      # URL to markdown converter
 ```
@@ -132,6 +134,7 @@ For comprehensive information, please refer to the appropriate language version:
 - [.vscode/settings.json](./.vscode/settings.json) - Development environment settings
 - [skill-manager/SKILL.md](./skill-manager/SKILL.md) - Skill lifecycle management guide
 - [skill-evolution-manager/SKILL.md](./skill-evolution-manager/SKILL.md) - Skill evolution management guide
+- [frontend-slides/SKILL.md](./frontend-slides/SKILL.md) - Frontend slides wrapper skill guide
 
 ## 📄 License
 
