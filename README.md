@@ -9,7 +9,7 @@ A collection of modular, self-contained skills that extend Claude's capabilities
 
 ## 🚀 Quick Overview
 
-This repository contains skills for OpenCode agents. Skills are "onboarding guides" for specific domains or tasks—they transform Claude from a general-purpose agent into a specialized agent equipped with procedural knowledge that no model can fully possess.
+This repository contains skills for agents. Skills are "onboarding guides" for specific domains or tasks—they transform Claude from a general-purpose agent into a specialized agent equipped with procedural knowledge that no model can fully possess.
 
 ### 🔥 New Skills Added (from Khazix-Skills)
 
@@ -142,4 +142,4 @@ Each skill includes its own license information. See individual skill directorie
 
 ---
 
-*This repository provides specialized skills for OpenCode agents. Follow the patterns and conventions established in existing skills when creating or modifying skills.*
+*This repository provides specialized skills for agents. Follow the patterns and conventions established in existing skills when creating or modifying skills.*
