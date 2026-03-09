@@ -1,0 +1,4 @@
+interface:
+  display_name: "Python Call Graph"
+  short_description: "Generate static Python call graphs in Mermaid and JSON"
+  default_prompt: "Use $python-call-graph to analyze a Python repository and generate a static Mermaid and JSON call graph."
