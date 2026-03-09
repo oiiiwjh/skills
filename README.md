@@ -1,4 +1,4 @@
-# OpenCode Skills Repository
+# Skills Repository
 
 A collection of modular, self-contained skills that extend Claude's capabilities with specialized knowledge, workflows, and tool integrations.
 
