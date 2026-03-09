@@ -55,14 +55,19 @@ def scan_skills(skills_root):
                 
             frontmatter = yaml.safe_load(parts[1])
             
+            metadata = frontmatter.get('metadata', {}) or {}
+            github_url = frontmatter.get('github_url') or metadata.get('github_url')
+            github_hash = frontmatter.get('github_hash') or metadata.get('github_hash')
+            version = frontmatter.get('version') or metadata.get('version')
+
             # Check if managed by github-to-skills
-            if 'github_url' in frontmatter:
+            if github_url:
                 skill_list.append({
                     "name": frontmatter.get('name', item),
                     "dir": skill_dir,
-                    "github_url": frontmatter['github_url'],
-                    "local_hash": frontmatter.get('github_hash', 'unknown'),
-                    "local_version": frontmatter.get('version', '0.0.0')
+                    "github_url": github_url,
+                    "local_hash": github_hash or 'unknown',
+                    "local_version": version or '0.0.0'
                 })
         except Exception as e:
             # print(f"Skipping {item}: {e}", file=sys.stderr)

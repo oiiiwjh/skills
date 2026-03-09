@@ -1,12 +1,16 @@
 ---
 name: frontend-slides
 description: Install and maintain the upstream Frontend Slides skill from GitHub so agents can create high-quality HTML slide decks and convert PPTX content.
-github_url: https://github.com/zarazhangrui/frontend-slides.git
-github_hash: 384d1a07ba1fd59ff626b141caa65f51a44ccc73
-version: v2.0.0
-created_at: 2026-03-06T03:00:18Z
-entry_point: scripts/wrapper.py
-dependencies: ["git", "python3", "python-pptx (optional for PPTX conversion)"]
+metadata:
+  github_url: https://github.com/zarazhangrui/frontend-slides.git
+  github_hash: 384d1a07ba1fd59ff626b141caa65f51a44ccc73
+  version: v2.0.0
+  created_at: 2026-03-06T03:00:18Z
+  entry_point: scripts/wrapper.py
+  dependencies:
+    - git
+    - python3
+    - python-pptx (optional for PPTX conversion)
 ---
 
 # Frontend Slides Wrapper Skill

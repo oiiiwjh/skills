@@ -12,6 +12,7 @@ from pathlib import Path
 UPSTREAM_URL = "https://github.com/zarazhangrui/frontend-slides.git"
 SKILL_NAME = "frontend-slides"
 TRACKED_HASH = "384d1a07ba1fd59ff626b141caa65f51a44ccc73"
+TRACKED_VERSION = "v2.0.0"
 
 AGENT_DIRS = {
     "codex": Path("~/.codex/skills").expanduser(),
@@ -35,6 +36,13 @@ def run(cmd: list[str]) -> None:
         raise RuntimeError(result.stderr.strip() or result.stdout.strip() or f"failed: {' '.join(cmd)}")
 
 
+def clone_tracked_repo(dst_repo: Path) -> None:
+    run(["git", "init", str(dst_repo)])
+    run(["git", "-C", str(dst_repo), "remote", "add", "origin", UPSTREAM_URL])
+    run(["git", "-C", str(dst_repo), "fetch", "--depth", "1", "origin", TRACKED_HASH])
+    run(["git", "-C", str(dst_repo), "checkout", "--detach", "FETCH_HEAD"])
+
+
 def copy_selected_files(src_repo: Path, dst_skill: Path, force: bool) -> None:
     if dst_skill.exists():
         if not force:
@@ -56,7 +64,7 @@ def install_or_update(target_dir: Path, force: bool) -> Path:
     dst_skill = target_dir / SKILL_NAME
     with tempfile.TemporaryDirectory(prefix="frontend-slides-src-") as tmp:
         repo_dir = Path(tmp) / "repo"
-        run(["git", "clone", "--depth", "1", UPSTREAM_URL, str(repo_dir)])
+        clone_tracked_repo(repo_dir)
         copy_selected_files(repo_dir, dst_skill, force=force)
     return dst_skill
 
@@ -88,6 +96,7 @@ def main() -> int:
         print(f"skill={SKILL_NAME}")
         print(f"url={UPSTREAM_URL}")
         print(f"tracked_hash={TRACKED_HASH}")
+        print(f"tracked_version={TRACKED_VERSION}")
         return 0
 
     target_root = resolve_target_dir(args.agent, args.target_dir)
