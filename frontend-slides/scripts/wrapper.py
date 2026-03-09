@@ -41,8 +41,6 @@ def clone_tracked_repo(dst_repo: Path) -> None:
     run(["git", "-C", str(dst_repo), "remote", "add", "origin", UPSTREAM_URL])
     run(["git", "-C", str(dst_repo), "fetch", "--depth", "1", "origin", TRACKED_HASH])
     run(["git", "-C", str(dst_repo), "checkout", "--detach", "FETCH_HEAD"])
-
-
 def copy_selected_files(src_repo: Path, dst_skill: Path, force: bool) -> None:
     if dst_skill.exists():
         if not force:
