@@ -1,10 +1,23 @@
-# AGENTS.md - OpenCode Skills Repository Guidelines
+# AGENTS.md - Skills Repository Guidelines
 
-Comprehensive guidelines for agentic coding agents working with the OpenCode Skills Repository.
+Comprehensive guidelines for agentic coding agents working with this skills repository.
 
 ## Overview
 
-This document provides guidelines, conventions, and best practices for agents working with skills in this repository. Skills are modular packages that extend Claude's capabilities with specialized knowledge, workflows, and tool integrations.
+This document provides guidelines, conventions, and best practices for agents working with skills in this repository. Skills are modular packages that extend agent capabilities with specialized knowledge, workflows, and tool integrations.
+
+## How to Use These Skills
+
+- Canonical source directory: `~/.agents/skills`
+- Codex and similar agents can discover skills directly from that directory.
+- For OpenCode, keep this repository in `~/.agents/skills` and symlink the skill directories into `~/.config/opencode/skill`.
+
+Example:
+```bash
+git clone <repo-url> ~/.agents/skills
+mkdir -p ~/.config/opencode/skill
+ln -s ~/.agents/skills/* ~/.config/opencode/skill/
+```
 
 ## Available Skills
 

@@ -1,6 +1,6 @@
-# OpenCode Skills Repository
+# Skills Repository
 
-A collection of modular, self-contained skills that extend Claude's capabilities with specialized knowledge, workflows, and tool integrations.
+A collection of modular, self-contained skills that extend coding agents with specialized knowledge, workflows, and tool integrations.
 
 ## 📚 Language Versions
 
@@ -9,7 +9,7 @@ A collection of modular, self-contained skills that extend Claude's capabilities
 
 ## 🚀 Quick Overview
 
-This repository contains skills for OpenCode agents. Skills are "onboarding guides" for specific domains or tasks—they transform Claude from a general-purpose agent into a specialized agent equipped with procedural knowledge that no model can fully possess.
+This repository contains reusable skills for coding agents. Skills are task-specific onboarding guides that package domain knowledge, workflows, and reusable tooling into a format agents can discover and apply.
 
 ### 🔥 New Skills Added (from Khazix-Skills)
 
@@ -67,6 +67,21 @@ These form a complete skill lifecycle management system:
 ├── frontend-slides/            # Frontend slides wrapper skill
 ├── latex-lite-template-builder/# LaTeX lite template builder
 └── baoyu-url-to-markdown/      # URL to markdown converter
+```
+
+## ⚡ How to Use These Skills
+
+For Codex and similar agents that scan `~/.agents/skills`, clone this repository directly there:
+
+```bash
+git clone <repo-url> ~/.agents/skills
+```
+
+For OpenCode, keep this repository in `~/.agents/skills` as the canonical source, then symlink skills into `~/.config/opencode/skill`:
+
+```bash
+mkdir -p ~/.config/opencode/skill
+ln -s ~/.agents/skills/* ~/.config/opencode/skill/
 ```
 
 ## ⚡ Quick Start
@@ -142,4 +157,4 @@ Each skill includes its own license information. See individual skill directorie
 
 ---
 
-*This repository provides specialized skills for OpenCode agents. Follow the patterns and conventions established in existing skills when creating or modifying skills.*
+*This repository provides specialized skills for coding agents. Follow the patterns and conventions established in existing skills when creating or modifying skills.*

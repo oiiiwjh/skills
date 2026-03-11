@@ -1,10 +1,10 @@
-# OpenCode Skills Repository
+# Skills Repository
 
-A collection of modular, self-contained skills that extend Claude's capabilities with specialized knowledge, workflows, and tool integrations.
+A collection of modular, self-contained skills that extend coding agents with specialized knowledge, workflows, and tool integrations.
 
 ## Overview
 
-This repository contains skills for OpenCode agents. Skills are "onboarding guides" for specific domains or tasks—they transform Claude from a general-purpose agent into a specialized agent equipped with procedural knowledge that no model can fully possess.
+This repository contains reusable skills for coding agents. Skills are task-specific onboarding guides that package domain knowledge, workflows, and reusable tooling into a format agents can discover and apply.
 
 Canonical source path policy: keep real skills in `~/.agents/skills`, and let other tool-specific directories use symlinks.
 
@@ -47,10 +47,10 @@ Canonical source path policy: keep real skills in `~/.agents/skills`, and let ot
 - Enhancing the humanization and readability of Chinese text
 
 ### 🛠️ **skill-creator**
-**Description**: Guide for creating effective skills. This skill should be used when users want to create a new skill (or update an existing skill) that extends Claude's capabilities with specialized knowledge, workflows, or tool integrations.
+**Description**: Guide for creating effective skills. This skill should be used when users want to create a new skill (or update an existing skill) that extends an agent's capabilities with specialized knowledge, workflows, or tool integrations.
 
 **Use when**:
-- Creating new OpenCode skills
+- Creating new skills
 - Modifying existing skills
 - Understanding skill development patterns
 - Generating OpenAI skill metadata
@@ -145,10 +145,22 @@ Canonical source path policy: keep real skills in `~/.agents/skills`, and let ot
 - Capturing web content that requires login
 - Archiving web pages with full formatting
 
-## Quick Start
+## How to Use These Skills
 
-### For Agentic Coding Agents
-- `opencode stats --models --days 7` can be used to view available model lists and statistical information for the past 7 days.
+For Codex and similar agents that scan `~/.agents/skills`, clone this repository directly there:
+
+```bash
+git clone <repo-url> ~/.agents/skills
+```
+
+For OpenCode, keep this repository in `~/.agents/skills` as the canonical source, then symlink skills into `~/.config/opencode/skill`:
+
+```bash
+mkdir -p ~/.config/opencode/skill
+ln -s ~/.agents/skills/* ~/.config/opencode/skill/
+```
+
+## Quick Start
 
 Refer to [AGENTS.md](./AGENTS.md) for comprehensive guidelines on:
 - Build/test commands for each skill
@@ -319,4 +331,4 @@ Each skill includes its own license information. See individual skill directorie
 
 ---
 
-*This repository provides specialized skills for OpenCode agents. Follow the patterns and conventions established in existing skills when creating or modifying skills.*
+*This repository provides specialized skills for coding agents. Follow the patterns and conventions established in existing skills when creating or modifying skills.*
