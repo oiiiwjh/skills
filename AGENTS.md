@@ -10,9 +10,11 @@ This document provides guidelines, conventions, and best practices for agents wo
 
 Canonical source directory for real skills: `~/.agents/skills`
 
-Current skill set (15):
+Current skill set (18):
 - `baoyu-url-to-markdown`
 - `explain-code`
+- `frontend-design`
+- `frontend-slides`
 - `github-commit`
 - `github-to-skills`
 - `humanizer`
@@ -21,6 +23,7 @@ Current skill set (15):
 - `paper-depth-reading`
 - `paper-detailed-analysis`
 - `pdf`
+- `python-call-graph`
 - `skill-creator`
 - `skill-evolution-manager`
 - `skill-installer`
