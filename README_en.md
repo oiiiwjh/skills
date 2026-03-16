@@ -79,6 +79,15 @@ Canonical source path policy: keep real skills in `~/.agents/skills`, and let ot
 - Updating local copies of `frontend-slides` from upstream
 - Managing a tracked wrapper with pinned hash/version metadata
 
+### 🧠 **explain-code**
+**Description**: Explains code with visual diagrams and analogies. Use this skill when teaching how code works, guiding someone through a codebase, or answering "how does this work?" questions.
+
+**Use when**:
+- Explaining a function, class, module, or request flow
+- Teaching unfamiliar code to another engineer
+- Walking through execution step by step
+- Making code easier to understand with diagrams and concrete analogies
+
 ### 📝 **update-readme**
 **Description**: Automatically updates README.md and AGENTS.md files based on current directory contents, git commit history, and existing documentation. Use this skill when maintaining project documentation, synchronizing the latest project status, or updating documentation based on codebase changes.
 
