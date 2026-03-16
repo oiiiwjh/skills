@@ -40,6 +40,7 @@ These form a complete skill lifecycle management system:
 | 🚀 **skill-evolution-manager** | Skill Management | Evolves skills based on user feedback |
 | 📥 **skill-installer** | Skill Management | Install Codex skills from curated list or GitHub repos |
 | 🌐 **baoyu-url-to-markdown** | Web & Content | Fetch URLs and convert to markdown using Chrome CDP |
+| 🧠 **explain-code** | Teaching & Explanation | Explains code with analogies, ASCII diagrams, walkthroughs, and gotchas |
 | 🎞️ **frontend-slides** | Presentation & Design | Wrapper skill to install/update animation-rich HTML slide generation from upstream GitHub repo |
 
 ## 🏗️ Project Structure
@@ -64,6 +65,7 @@ These form a complete skill lifecycle management system:
 ├── skill-manager/              # Skill lifecycle manager
 ├── skill-evolution-manager/    # Skill evolution manager
 ├── skill-installer/            # Skill installer
+├── explain-code/               # Code explanation skill
 ├── frontend-slides/            # Frontend slides wrapper skill
 ├── latex-lite-template-builder/# LaTeX lite template builder
 └── baoyu-url-to-markdown/      # URL to markdown converter

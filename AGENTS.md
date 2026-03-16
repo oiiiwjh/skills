@@ -10,8 +10,9 @@ This document provides guidelines, conventions, and best practices for agents wo
 
 Canonical source directory for real skills: `~/.agents/skills`
 
-Current skill set (14):
+Current skill set (15):
 - `baoyu-url-to-markdown`
+- `explain-code`
 - `github-commit`
 - `github-to-skills`
 - `humanizer`
